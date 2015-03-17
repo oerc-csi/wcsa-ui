@@ -1,0 +1,55 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix owl: <http://www.w3.org/2002/07/owl#> 
+prefix dc: <http://purl.org/dc/terms/> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#> 
+prefix ht: <http://hathitrust.org/htrc/workset#> 
+prefix prov: <http://www.w3.org/ns/prov#> 
+prefix eeProv: <http://eeboo.oerc.ox.ac.uk/eeProv/> 
+prefix eeboo: <http://eeboo.oerc.ox.ac.uk/eeboo/>
+PREFIX salt: <http://127.0.0.1:8890/salt/>
+PREFIX saltset: <http://127.0.0.1:8890/saltsets/>
+PREFIX : <http://127.0.0.1:8890/>
+
+
+INSERT {
+    GRAPH :worksets { 
+        <http://hathitrust.org/htrc/workset/sample-data>
+          a owl:Ontology ;
+          owl:imports <http://hathitrust.org/htrc/workset/0.2> ;
+          owl:versionIRI <http://hathitrust.org/htrc/workset/sample-data/0.1> .
+
+        <http://eeboo.oerc.ox.ac.uk/eeboo/testuser>
+          a owl:NamedIndividual, dc:Agent ;
+          dc:identifier "testuser"^^xsd:string .
+
+        <http://eeboo.oerc.ox.ac.uk/eeboo/worksets/workset_6>
+          a owl:NamedIndividual, <http://hathitrust.org/htrc/workset#Workset> ;
+          dc:modified "2015"^^xsd:date ;
+          dc:title "Biographers"^^xsd:string ;
+          dc:creator <http://eeboo.oerc.ox.ac.uk/eeboo/testuser> ;
+          dc:abstract "all works ever published by anyone who has ever published a work classified as a biography"^^xsd:string ;
+          a prov:Collection ;
+          prov:wasGeneratedBy (eeProv:InputCollection "2015"^^xsd:date) ;
+          ht:gathers ?Work, ?eeboo_work.
+    }
+}
+
+WHERE {
+    ?Work <http://www.loc.gov/mods/rdf/v1#genre> ?Genre . 
+    ?Genre rdfs:label ?GenreLabel .
+
+    BIND(IRI(CONCAT(?Work, "_creator")) AS ?ht_author) .
+
+    ?ht_author salt:in_salt_set saltset:htrc-wcsa_creators ;
+            :matchParticipant ?match .
+    ?eeboo_author salt:in_salt_set saltset:eeboo_creators ;
+            :matchParticipant ?match .
+      
+    ?eeboo_work eeboo:creator ?eeboo_author ;
+            <http://www.loc.gov/mods/rdf/v1#titlePrincipal> ?eeboo_title_bnode.
+    ?eeboo_title_bnode rdfs:label ?eeboo_title.
+
+    FILTER(regex(?GenreLabel, "biography", "i")) .
+
+}

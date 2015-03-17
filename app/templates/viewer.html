@@ -5,56 +5,31 @@
     </head>
     <body>
         <div class = "ui-head">Elephant Workset Viewer</div>
+        <div class = "collection">
+            {% for workset in worksets %}
+            <div class = "item">
+                <div class = "header">{{ worksets[workset]["title"]|safe }}</div>
+                <ul>
+                    <li> Abstract: {{ worksets[workset]["abstract"]|safe }}</li>
+                    <li> User: {{ worksets[workset]["user"]|safe }}</li>
+                    <li> Created: {{ worksets[workset]["mod_date"]|safe }}</li>
+                    <li class="numworks" onclick="expandItems(this)"> {{ worksets[workset]["works"]|length }} items <i class="fa fa-plus-square-o"></i>
+                    <div class="works">
+                        {% for work in worksets[workset]["works"] %} 
+                            <ul>
+                                <li class = "{{ work["saltset"]|safe }}"> 
+                                <span class="author" title="{{ work["creator"]|safe }}">{{ work["author"]|safe }}</span>
+                                    <span class="title" title="{{ work['uri']|safe }}">{{ work["worktitle"]|safe }}</span>
+                                </li>
+                            </ul>
+                        {% endfor %}
+                    </div>
+                    </li>
+                </ul>
 
-        <div class = "collection" id="selectable">
-            <div class = "item">
-                <div class = "header">Workset 1</div>
-                <ul>
-                    <li> Metadata 1</li>
-                    <li> Metadata 2</li>
-                    <li> Metadata 3</li>
-                </ul>
             </div>
-            <div class = "item">
-                <div class = "header">Workset 2</div>
-                <ul>
-                    <li> Metadata 1</li>
-                    <li> Metadata 2</li>
-                    <li> Metadata 3</li>
-                </ul>
-            </div>
-            <div class = "item">
-                <div class = "header">Workset 3</div>
-                <ul>
-                    <li> Metadata 1</li>
-                    <li> Metadata 2</li>
-                    <li> Metadata 3</li>
-                </ul>
-            </div>
-            <div class = "item">
-                <div class = "header">Workset 4</div>
-                <ul>
-                    <li> Metadata 1</li>
-                    <li> Metadata 2</li>
-                    <li> Metadata 3</li>
-                </ul>
-            </div>
-            <div class = "item">
-                <div class = "header">Workset 5</div>
-                <ul>
-                    <li> Metadata 1</li>
-                    <li> Metadata 2</li>
-                    <li> Metadata 3</li>
-                </ul>
-            </div>
-            <div class = "item">
-                <div class = "header">Workset 6</div>
-                <ul>
-                    <li> Metadata 1</li>
-                    <li> Metadata 2</li>
-                    <li> Metadata 3</li>
-                </ul>
-            </div>
+            {% endfor %}
         </div>
+        <span class="button">Add new</span>
     </body>
 </html>

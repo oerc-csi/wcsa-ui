@@ -2,3 +2,27 @@
     font-size: 1.5em;
 }
 
+.button { 
+    position:relative;
+    width:auto;
+    border: 1px solid orange;
+}
+
+.works { 
+    display:none;
+}
+
+.works .author { 
+    font-weight: bold;
+}
+
+.works .htrc-wcsa_works { 
+    background: #ffffcc;
+}
+.works .eeboo_works { 
+    background: #ccffff;
+}
+
+
+
+
