@@ -13,11 +13,11 @@ from . import main
 @main.route('/index.html', methods=['GET', 'POST'])
 @main.route('/viewer.html', methods=['GET', 'POST'])
 @main.route('/', methods=['GET', 'POST'])
-def viewer():
+def all_worksets():
     app = current_app._get_current_object()
     sparql = SPARQLWrapper(app.config["ENDPOINT"])
     selectWorksetsQuery = open(app.config["ELEPHANT_QUERY_DIR"] + "select_worksets.rq").read()
-    sparql.setQuery(selectWorksetsQuery)
+    sparql.setQuery(selectWorksetsQuery.format(""))
     sparql.setReturnFormat(JSON)
     results = sparql.query().convert()
     worksets = dict()
@@ -25,6 +25,7 @@ def viewer():
         if result["workset"]["value"] not in worksets:
             worksets[result["workset"]["value"]] = {
                 "uri": result["workset"]["value"],
+                "urilocal": result["workset"]["value"].replace("http://eeboo.oerc.ox.ac.uk/", "http://127.0.0.1:5000/"),
                 "mod_date": result["mod_date"]["value"],
                 "title": result["title"]["value"],
                 "abstract": result["abstract"]["value"],
@@ -47,4 +48,13 @@ def viewer():
     for workset in worksets:
         worksets[workset]["works"] = sorted(worksets[workset]["works"], key=lambda k: (k["author"], k["worktitle"]))
     return render_template("viewer.html", worksets = worksets)
+
+@main.route('/eeboo/worksets/<workset>', methods=['GET', 'POST'])
+def detail_workset(workset):
+    app = current_app._get_current_object()
+    sparql = SPARQLWrapper(app.config["ENDPOINT"])
+    workset = "http://eeboo.oerc.ox.ac.uk/eeboo/worksets/" + workset
+    detailedWorksetQuery = open(app.config["ELEPHANT_QUERY_DIR"] + "select_worksets.rq").read()
+    ws = "BIND('{0}' as ?workset) .".format(workset)
+    return render_template("workset.html")
 

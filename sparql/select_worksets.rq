@@ -4,7 +4,8 @@ PREFIX mods: <http://www.loc.gov/mods/rdf/v1#>
 PREFIX salt: <http://127.0.0.1:8890/salt/>
 PREFIX eeboo: <http://eeboo.oerc.ox.ac.uk/eeboo/>
 SELECT DISTINCT * 
-WHERE {
+WHERE {{
+    {0} 
     ?workset a ht:Workset ;
        dct:modified ?mod_date ;
        dct:title ?title ;
@@ -13,14 +14,14 @@ WHERE {
        ht:gathers ?work .
     ?user dct:identifier ?username .
     ?work salt:in_salt_set ?saltset
-    OPTIONAL{ 
+    OPTIONAL {{ 
         ?work rdfs:label ?worktitle; 
               eeboo:creator ?creator .
         ?creator rdfs:label ?author 
-    } .
-    OPTIONAL{ ?work mods:titlePrincipal ?titlebnode ;
+    }} .
+    OPTIONAL{{ ?work mods:titlePrincipal ?titlebnode ;
                     dc:creator ?creator .
               ?titlebnode rdfs:label ?worktitle . 
               ?creator rdfs:label ?author 
-    } .
-}
+    }} .
+}} 

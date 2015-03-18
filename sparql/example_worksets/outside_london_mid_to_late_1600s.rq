@@ -1,0 +1,73 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix owl: <http://www.w3.org/2002/07/owl#> 
+prefix dc: <http://purl.org/dc/terms/> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#> 
+prefix ht: <http://hathitrust.org/htrc/workset#> 
+prefix prov: <http://www.w3.org/ns/prov#> 
+prefix eeProv: <http://eeboo.oerc.ox.ac.uk/eeProv/> 
+prefix eeboo: <http://eeboo.oerc.ox.ac.uk/eeboo/>
+PREFIX salt: <http://127.0.0.1:8890/salt/>
+PREFIX saltset: <http://127.0.0.1:8890/saltsets/>
+PREFIX : <http://127.0.0.1:8890/>
+
+INSERT { 
+    GRAPH :worksets {
+        <http://hathitrust.org/htrc/workset/sample-data>
+          a owl:Ontology ;
+          owl:imports <http://hathitrust.org/htrc/workset/0.2> ;
+          owl:versionIRI <http://hathitrust.org/htrc/workset/sample-data/0.1> .
+
+        <http://eeboo.oerc.ox.ac.uk/eeboo/testuser>
+          a owl:NamedIndividual, dc:Agent ;
+          dc:identifier "testuser"^^xsd:string .
+
+        <http://eeboo.oerc.ox.ac.uk/eeboo/worksets/workset_4>
+          a owl:NamedIndividual, <http://hathitrust.org/htrc/workset#Workset> ;
+          dc:modified "2015"^^xsd:date ;
+          dc:title "All works which have published outside of London 1650 - 1700"^^xsd:string ;
+          dc:creator <http://eeboo.oerc.ox.ac.uk/eeboo/testuser> ;
+          dc:abstract "All the works that have been published outside of London in the mid- to late 1600s"^^xsd:string ;
+          a prov:Collection ;
+          prov:wasGeneratedBy (eeProv:InputCollection "2015"^^xsd:date) ;
+          ht:gathers ?ht_work, ?eeboo_work .
+    }
+} 
+WHERE {
+    {
+        ?ht_work a <http://www.loc.gov/mods/rdf/v1#ModsResource> ;   
+               <http://www.loc.gov/mods/rdf/v1#placeOfOrigin>  ?place ;
+               <http://www.loc.gov/mods/rdf/v1#resourceDateIssued> ?date .
+
+        ?place a <http://www.loc.gov/mads/rdf/v1#Geographic>;
+                             rdfs:label ?publicationPlace.
+
+        FILTER (regex(?publicationPlace,  "Lond", "i"))
+
+        FILTER (?date >="1650"^^xsd:date)
+               
+    }
+    UNION
+    {
+        {
+            ?eeboo_work a eeboo:Work ;
+                <http://eeboo.oerc.ox.ac.uk/eeboo/raw_pubplace> ?publicationPlace ;
+                <http://www.loc.gov/mods/rdf/v1#placeOfOrigin> ?eeboo_place ;
+                <http://eeboo.oerc.ox.ac.uk/eeboo/precise-publication> ?precise_date .
+
+            FILTER (regex(?publicationPlace,  "Lond", "i"))
+            FILTER (?precise_date >="1650"^^xsd:date)
+        }
+        UNION
+        {
+            ?eeboo_work a eeboo:Work ;
+                <http://eeboo.oerc.ox.ac.uk/eeboo/raw_pubplace> ?publicationPlace ;
+                <http://www.loc.gov/mods/rdf/v1#placeOfOrigin> ?eeboo_place ;
+                <http://eeboo.oerc.ox.ac.uk/eeboo/approx-publication> ?approx_date .
+            
+            FILTER (regex(?publicationPlace,  "Lond", "i"))
+            FILTER (?approx_date >="1650"^^xsd:date)
+        }
+     }
+}
+

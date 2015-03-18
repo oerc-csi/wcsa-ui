@@ -1,0 +1,54 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix owl: <http://www.w3.org/2002/07/owl#> 
+prefix dc: <http://purl.org/dc/terms/> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#> 
+prefix ht: <http://hathitrust.org/htrc/workset#> 
+prefix prov: <http://www.w3.org/ns/prov#> 
+prefix eeProv: <http://eeboo.oerc.ox.ac.uk/eeProv/> 
+prefix eeboo: <http://eeboo.oerc.ox.ac.uk/eeboo/>
+PREFIX salt: <http://127.0.0.1:8890/salt/>
+PREFIX saltset: <http://127.0.0.1:8890/saltsets/>
+PREFIX : <http://127.0.0.1:8890/>
+
+INSERT {
+    GRAPH <http://127.0.0.1:8890/worksets> { 
+        <http://hathitrust.org/htrc/workset/sample-data>
+          a owl:Ontology ;
+          owl:imports <http://hathitrust.org/htrc/workset/0.2> ;
+          owl:versionIRI <http://hathitrust.org/htrc/workset/sample-data/0.1> .
+
+        <http://eeboo.oerc.ox.ac.uk/eeboo/testuser>
+          a owl:NamedIndividual, dc:Agent ;
+          dc:identifier "testuser"^^xsd:string .
+
+        <http://eeboo.oerc.ox.ac.uk/eeboo/worksets/workset_2>
+          a owl:NamedIndividual, <http://hathitrust.org/htrc/workset#Workset> ;
+          dc:modified "2015"^^xsd:date ;
+          dc:title "All works published in Oxford"^^xsd:string ;
+          dc:creator <http://eeboo.oerc.ox.ac.uk/eeboo/testuser> ;
+          dc:abstract "All the works that have been published in Oxford at any time within the temporal constraints of the datasets"^^xsd:string ;
+          a prov:Collection ;
+          prov:wasGeneratedBy (eeProv:InputCollection "2015"^^xsd:date) ;
+          ht:gathers ?ht_work, ?eeboo_work .
+    }
+}
+  
+WHERE {
+     {
+        ?ht_work a <http://www.loc.gov/mods/rdf/v1#ModsResource> ;   
+               <http://www.loc.gov/mods/rdf/v1#placeOfOrigin>  ?place .
+
+        ?place a <http://www.loc.gov/mads/rdf/v1#Geographic>;
+                             rdfs:label ?publicationPlace .
+
+        FILTER(regex(?publicationPlace, "Oxford", "i"))
+    }
+    UNION
+    {
+
+        ?eeboo_work a eeboo:Work ;
+             <http://www.loc.gov/mods/rdf/v1#placeOfOrigin> ?publicationPlace .
+        FILTER(regex(?publicationPlace, "Oxford", "i"))
+    }
+}
+

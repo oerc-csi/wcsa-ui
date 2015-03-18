@@ -8,8 +8,10 @@
         <div class = "collection">
             {% for workset in worksets %}
             <div class = "item">
-                <div class = "header">{{ worksets[workset]["title"]|safe }}</div>
+                <div class = "header" title=" {{ worksets[workset]["uri"]|safe }}">{{ worksets[workset]["title"]|safe }}</div>
                 <ul>
+                    <li> URI: <a href="{{ worksets[workset]["urilocal"]|safe }}" title="Click to open detailed workset view">
+                        {{ worksets[workset]["uri"]|safe }}</a></li>
                     <li> Abstract: {{ worksets[workset]["abstract"]|safe }}</li>
                     <li> User: {{ worksets[workset]["user"]|safe }}</li>
                     <li> Created: {{ worksets[workset]["mod_date"]|safe }}</li>
