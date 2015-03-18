@@ -13,7 +13,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
     BASE_URI = "http://127.0.0.1:8890"
     ENDPOINT = "http://127.0.0.1:8890/sparql"
-    ELEPHANT_QUERY_DIR = os.environ.get("ELEPHANT_QUERY_DIR") or "/home/davidw/EEBOO/elephant-ui/sparql/"
+    ELEPHANT_QUERY_DIR = os.environ.get("ELEPHANT_QUERY_DIR") or os.environ.get("HOME") + "/EEBOO/elephant-ui/sparql/"
     USER = "testuser"
 
 
