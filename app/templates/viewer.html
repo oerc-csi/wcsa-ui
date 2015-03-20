@@ -7,28 +7,17 @@
         <div class = "ui-head">Elephant Workset Viewer</div>
         <div class = "collection">
             {% for workset in worksets %}
+            <hr/>
             <div class = "item">
                 <div class = "header" title=" {{ worksets[workset]["uri"]|safe }}">{{ worksets[workset]["title"]|safe }}</div>
-                <ul>
-                    <li> URI: <a href="{{ worksets[workset]["urilocal"]|safe }}" title="Click to open detailed workset view">
-                        {{ worksets[workset]["uri"]|safe }}</a></li>
+                <ul class="workset-metadata">
+                    <li> <a href="{{ worksets[workset]["urilocal"]|safe }}" title="Click to open detailed workset view">
+                        Open in workset viewer </a></li>
                     <li> Abstract: {{ worksets[workset]["abstract"]|safe }}</li>
                     <li> User: {{ worksets[workset]["user"]|safe }}</li>
                     <li> Created: {{ worksets[workset]["mod_date"]|safe }}</li>
-                    <li class="numworks" onclick="expandItems(this)"> {{ worksets[workset]["works"]|length }} items <i class="fa fa-plus-square-o"></i>
-                    <div class="works">
-                        {% for work in worksets[workset]["works"] %} 
-                            <ul>
-                                <li class = "{{ work["saltset"]|safe }}"> 
-                                <span class="author" title="{{ work["creator"]|safe }}">{{ work["author"]|safe }}</span>
-                                    <span class="title" title="{{ work['uri']|safe }}">{{ work["worktitle"]|safe }}</span>
-                                </li>
-                            </ul>
-                        {% endfor %}
-                    </div>
-                    </li>
+                    <li> {{ worksets[workset]["works"]|length }} items </li>
                 </ul>
-
             </div>
             {% endfor %}
         </div>

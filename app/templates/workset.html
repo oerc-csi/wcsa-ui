@@ -1,10 +1,35 @@
 <html>
     <head> 
         {% include "boiler.html" %}
-        <title> Elephant Workset Viewer: {{ workset["title"]|safe }} </title>
+        <title> Elephant Workset Viewer </title>
     </head>
     <body>
-        <div> Foo </div>
+        {% for workset in worksets %}
+        <div class = "ui-head" title=" {{ worksets[workset]["uri"]|safe }}">{{ worksets[workset]["title"]|safe }}</div>
+        <div class = "collection">
+            <div class = "item">
+                <span class="button">Back</span>
+                <span class="button">Construct RDF</span>
+                <span class="button">Clone in Elephant</span>
+                <ul class="workset-metadata">
+                    <li> Abstract: {{ worksets[workset]["abstract"]|safe }}</li>
+                    <li> User: {{ worksets[workset]["user"]|safe }}</li>
+                    <li> Created: {{ worksets[workset]["mod_date"]|safe }}</li>
+                    <li class="numworks" onclick="expandItems(this)"> {{ worksets[workset]["works"]|length }} items </li>
+                </ul>
+                <div class="detailed-works">
+                    {% for work in worksets[workset]["works"] %} 
+                    <div class="work {{ work["saltset"]|safe }}"> 
+                        <div class="title" title="{{ work["uri"]|safe }}"><span class="itemheader">Title:</span> {{ work["worktitle"]|safe }}</div>
+                        <div class="author" title="{{ work["creator"]|safe }}"><span class="itemheader">Author:</span> {{ work["author"]|safe }} </div>
+                        <div class="pubLocation"><span class="itemheader">Place of publication:</span> {{ work["place"]|safe }}</div>
+                        <div class="pubDate"><span class="itemheader">Publication year:</span> {{ work["pubdate"]|safe }} {{work["datePrecision"]|safe}}</div>
+
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </body>
 </html>
-

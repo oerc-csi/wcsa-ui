@@ -1,11 +1,24 @@
+body { 
+    margin: 40px;
+}
 .ui-head { 
-    font-size: 1.5em;
+    font-size: 1.6em;
+    margin-bottom: 15px;
+}
+
+.header { 
+    font-size: 1.3em;
 }
 
 .button { 
     position:relative;
     width:auto;
     border: 1px solid orange;
+}
+
+.workset-metadata { 
+    font-size: 1.2em;
+    height: 20%;
 }
 
 .works { 
@@ -16,13 +29,31 @@
     font-weight: bold;
 }
 
-.works .htrc-wcsa_works { 
+.htrc-wcsa_works { 
     background: #ffffda;
+    opacity:100%;
+    z-index: 1;
 }
-.works .eeboo_works { 
+.eeboo_works { 
     background: #daffff;
+    opacity:100%;
+    z-index: 1;
+}
+
+.work { 
+    margin-top: 5px;
+    border: 1px solid black; 
+}
+
+.itemheader { 
+    font-weight: bold;
+}
+
+.detailed-works { 
+    position:relative;
+    height:auto;
+    overflow-y:auto;
 }
 
 
-
-
+    

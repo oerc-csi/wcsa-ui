@@ -1,0 +1,27 @@
+<html>
+    <head> 
+        {% include "boiler.html" %}
+        <title> Elephant Workset Constructor </title>
+    </head>
+    <body>
+        <div id="querybox">
+            <div id="qperson">
+                <input type="text" id="person" onKeyUp="personInput(this)">
+                <div id="qpersons">
+                </div>
+            </div>
+       </div>
+       <div id="preview">
+       </div>
+        <script>
+            {# build a JSON object that contains all EEBOO Persons, so that we can access them from the query interface #}
+            var persons = { 
+                {% set delim = "" %}
+                {% for p in persons %} 
+                    {{ delim }} "{{ p["label"]|safe }}": "{{ p["uri"]|safe }}"
+                    {% set delim = "," %}
+                {% endfor %}
+            }
+        </script>
+    </body>
+</html>

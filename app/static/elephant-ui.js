@@ -1,3 +1,21 @@
+function personInput(thisItem) { 
+    var val = $(thisItem).val();
+    if (val.length > 2) {  // dont fire on short input to prevent enormous lists
+        var re = new RegExp(val, "i");
+        personNames = Object.keys(persons)
+        includePersons = personNames.filter(function(val) { 
+            return re.test(val);
+        });
+        previewHtml = "";
+        for(p in includePersons) { 
+            previewHtml += '<div id="pperson" title="' + persons[includePersons[p]] + '">' + includePersons[p] + '</div>\n';
+        }
+        $("#preview").html(previewHtml);
+           
+    }
+}
+
+
 function expandItems(thisItem) { 
     if($(thisItem).find("i").hasClass("fa-plus-square-o")) {
         // we need to expand the items
@@ -13,3 +31,7 @@ function expandItems(thisItem) {
         $(thisItem).find("i").addClass("fa-plus-square-o");
     }
 }
+
+$(document).ready(function() { 
+    $("#person").val("");
+});

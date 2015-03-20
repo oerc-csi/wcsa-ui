@@ -1,0 +1,8 @@
+PREFIX saltset: <http://127.0.0.1:8890/saltsets/>
+PREFIX salt: <http://127.0.0.1:8890/salt/>
+
+select distinct ?uri ?label { 
+    ?uri salt:in_salt_set saltset:eeboo_creators ; 
+        rdfs:label ?label .
+}
+order by ?label

@@ -12,12 +12,24 @@ from . import main
 
 @main.route('/index.html', methods=['GET', 'POST'])
 @main.route('/viewer.html', methods=['GET', 'POST'])
+@main.route('/viewer', methods=['GET', 'POST'])
 @main.route('/', methods=['GET', 'POST'])
 def all_worksets():
+    worksets = select_worksets()
+    return render_template("viewer.html", worksets = worksets)
+
+@main.route('/eeboo/worksets/<workset>', methods=['GET', 'POST'])
+def detail_workset(workset):
+    ws = "BIND(<{0}> as ?workset) .".format("http://eeboo.oerc.ox.ac.uk/eeboo/worksets/" + workset)
+    workset = select_worksets(ws)
+    return render_template("workset.html", worksets=workset)
+
+def select_worksets(specific_workset = ""):
     app = current_app._get_current_object()
     sparql = SPARQLWrapper(app.config["ENDPOINT"])
     selectWorksetsQuery = open(app.config["ELEPHANT_QUERY_DIR"] + "select_worksets.rq").read()
-    sparql.setQuery(selectWorksetsQuery.format(""))
+    query = selectWorksetsQuery.format(specific_workset)
+    sparql.setQuery(query)
     sparql.setReturnFormat(JSON)
     results = sparql.query().convert()
     worksets = dict()
@@ -42,19 +54,33 @@ def all_worksets():
                 "worktitle": result["worktitle"]["value"], 
                 "author": result["author"]["value"],
                 "creator": result["creator"]["value"],
+                "pubdate": result["pubdate"]["value"],
+                "datePrecision": result["datePrecision"]["value"],
+                "place": result["place"]["value"],
                 "saltset":saltset
             }) 
     
     for workset in worksets:
         worksets[workset]["works"] = sorted(worksets[workset]["works"], key=lambda k: (k["author"], k["worktitle"]))
-    return render_template("viewer.html", worksets = worksets)
+    return worksets
 
-@main.route('/eeboo/worksets/<workset>', methods=['GET', 'POST'])
-def detail_workset(workset):
+@main.route('/construct.html', methods = ['GET', 'POST'])
+@main.route('/construct', methods = ['GET', 'POST'])
+def construct_workset():
     app = current_app._get_current_object()
     sparql = SPARQLWrapper(app.config["ENDPOINT"])
-    workset = "http://eeboo.oerc.ox.ac.uk/eeboo/worksets/" + workset
-    detailedWorksetQuery = open(app.config["ELEPHANT_QUERY_DIR"] + "select_worksets.rq").read()
-    ws = "BIND('{0}' as ?workset) .".format(workset)
-    return render_template("workset.html")
+    # Get a list of all eeboo persons (they are aligned with htrc persons)
+    selectPersonsQuery = open(app.config["ELEPHANT_QUERY_DIR"] + "select_persons.rq").read()
+    sparql.setQuery(selectPersonsQuery)
+    sparql.setReturnFormat(JSON)
+    personResults = sparql.query().convert()
+    persons = list()
+    for p in personResults["results"]["bindings"]:
+        persons.append({ "uri": p["uri"]["value"], "label": p["label"]["value"] })
+    return render_template("construct.html", persons = persons)
+
+
+
+
+
 
