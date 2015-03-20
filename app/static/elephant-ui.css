@@ -14,6 +14,7 @@ body {
     position:relative;
     width:auto;
     border: 1px solid orange;
+    cursor:pointer;
 }
 
 .workset-metadata { 
@@ -55,5 +56,54 @@ body {
     overflow-y:auto;
 }
 
+.pperson span:hover { 
+    cursor:pointer;
+}
 
-    
+.pperson i { 
+    cursor:pointer;
+}
+
+.pperson .fa-eye, .pperson .fa-eye-slash { 
+    visibility:hidden;
+}
+.pperson:hover .fa-eye, .pperson:hover .fa-eye-slash {
+    visibility:visible;
+    color:#cccccc;
+}
+
+
+.pperson.unlisted span { 
+    cursor:default !important;
+    color:#aaaaaa !important;
+    text-decoration:line-through;
+    pointer-events:none;
+}
+
+.pperson.selected span { 
+    color:#669966 !important;
+}
+
+.pperson.selected .fa-eye-slash { 
+    visibility:hidden !important;
+}
+
+.controls .button { 
+    visibility:hidden;
+}
+
+#querybuilder { 
+    border: 1px solid black;
+}
+
+#includedInQuery { 
+    border: 1px solid black;
+}
+
+#personsInQuery div { 
+    cursor:pointer;
+}
+
+#personsInQuery div:hover { 
+    color:#996666;
+}

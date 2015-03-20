@@ -5,7 +5,7 @@ PREFIX salt: <http://127.0.0.1:8890/salt/>
 PREFIX eeboo: <http://eeboo.oerc.ox.ac.uk/eeboo/>
 SELECT DISTINCT * 
 WHERE {{
-    {0} 
+    {0}
     ?workset a ht:Workset ;
        dct:modified ?mod_date ;
        dct:title ?title ;
@@ -13,15 +13,40 @@ WHERE {{
        dct:creator ?user ;
        ht:gathers ?work .
     ?user dct:identifier ?username .
-    ?work salt:in_salt_set ?saltset
+    ?work salt:in_salt_set ?saltset .
     OPTIONAL {{ 
         ?work rdfs:label ?worktitle; 
+              eeboo:raw_pubplace ?place ;
               eeboo:creator ?creator .
-        ?creator rdfs:label ?author 
+        ?creator rdfs:label ?author . 
+          OPTIONAL {{ 
+            ?work eeboo:precise-publication ?precisepub .
+            BIND("" as ?pubDatePrecision) . 
+          }}
+          OPTIONAL {{ 
+            ?work eeboo:approx-publication ?approxpub .
+            BIND("(approx.)" as ?pubDatePrecision) .
+          }}
+    
+        BIND(COALESCE(STR(YEAR(COALESCE(?precisepub, ?approxpub))), "Unknown") as ?pubdate ).
+        BIND(COALESCE(?pubDatePrecision, "") as ?datePrecision) . 
+
+     
+    }}  . 
+    OPTIONAL{{ 
+        ?work mods:resourceDateIssued ?pubdate .
+        FILTER(str(datatype(?pubdate)) = "xsd:string") . 
+        ?work mods:titlePrincipal ?titlebnode ;
+                mods:placeOfOrigin ?placebnode .
+        ?placebnode rdfs:label ?place . 
+        FILTER(?place != "enk") . #TODO what is this?
+        ?titlebnode rdfs:label ?worktitle .
+        FILTER(?worktitle != "ESTC" && ?worktitle != "Wing (2nd ed.)" && ?worktitle != "Wing (2nd ed., 1994)") . #TODO what are these?
+        ?work  dc:creator ?creator ;
+                mods:statementOfResponsibility ?imprint . 
+        ?creator rdfs:label ?author .
+        BIND("" as ?datePrecision) .
+              
     }} .
-    OPTIONAL{{ ?work mods:titlePrincipal ?titlebnode ;
-                    dc:creator ?creator .
-              ?titlebnode rdfs:label ?worktitle . 
-              ?creator rdfs:label ?author 
-    }} .
-}} 
+}}
+

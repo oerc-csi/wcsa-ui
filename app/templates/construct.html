@@ -4,14 +4,27 @@
         <title> Elephant Workset Constructor </title>
     </head>
     <body>
-        <div id="querybox">
-            <div id="qperson">
-                <input type="text" id="person" onKeyUp="personInput(this)">
-                <div id="qpersons">
-                </div>
-            </div>
+       <div id="includedInQuery">
+           Currently included in workset:<br/>
+           <div id="personsInQuery"> </div>
+           <span class="button">Create workset</span>
+           <br/>
        </div>
-       <div id="preview">
+        <div id="querybuilder">
+            <div id="querybox">
+                <div id="qperson">
+                    <input type="text" id="person" onKeyUp="personInput(this)">
+                    <div id="qpersons">
+                    </div>
+                </div>
+           </div>
+           <div class="controls">
+              <span class="button" onclick="includeSelected(this)">Add selected</span>
+              <span class="button" onclick="includeListed(this)">Add all listed</span>
+          </div>
+           <div id="preview">
+               <div class = "persons"></div>
+           </div>
        </div>
         <script>
             {# build a JSON object that contains all EEBOO Persons, so that we can access them from the query interface #}

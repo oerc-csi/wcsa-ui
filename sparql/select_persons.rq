@@ -1,8 +1,19 @@
 PREFIX saltset: <http://127.0.0.1:8890/saltsets/>
 PREFIX salt: <http://127.0.0.1:8890/salt/>
+PREFIX : <http://127.0.0.1:8890/>
 
 select distinct ?uri ?label { 
-    ?uri salt:in_salt_set saltset:eeboo_creators ; 
+  { 
+     ?uri salt:in_salt_set saltset:eeboo_creators ; 
         rdfs:label ?label .
+  }
+  UNION { 
+     ?uri salt:in_salt_set saltset:htrc-wcsa_creators;
+        rdfs:label ?label .
+     MINUS {
+          ?uri :matchParticipant ?match .
+          ?foo :matchParticipant ?match ; 
+               salt:in_salt_set saltset:eeboo_creators . 
+     } .
+  }
 }
-order by ?label
