@@ -1,0 +1,19 @@
+PREFIX saltset: <http://127.0.0.1:8890/saltsets/>
+PREFIX salt: <http://127.0.0.1:8890/salt/>
+PREFIX eeboo: <http://eeboo.oerc.ox.ac.uk/>
+PREFIX : <http://127.0.0.1:8890/>
+
+select distinct ?place { 
+  { 
+     ?work salt:in_salt_set saltset:eeboo_works ; 
+        eeboo:raw_pubplace ?place .
+  }
+  UNION { 
+     ?work salt:in_salt_set saltset:htrc-wcsa_works;
+           <http://www.loc.gov/mods/rdf/v1#placeOfOrigin>  ?placeNode .
+
+        ?placeNode a <http://www.loc.gov/mads/rdf/v1#Geographic>;
+                             rdfs:label ?place .
+  }
+}
+order by ?place

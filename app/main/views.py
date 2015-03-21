@@ -69,7 +69,7 @@ def select_worksets(specific_workset = ""):
 def construct_workset():
     app = current_app._get_current_object()
     sparql = SPARQLWrapper(app.config["ENDPOINT"])
-    # Get a list of all eeboo persons (they are aligned with htrc persons)
+    # Get a list of all eeboo persons plus all HTRC persons who are NOT aligned to eeboo persons
     selectPersonsQuery = open(app.config["ELEPHANT_QUERY_DIR"] + "select_persons.rq").read()
     sparql.setQuery(selectPersonsQuery)
     sparql.setReturnFormat(JSON)
@@ -77,7 +77,14 @@ def construct_workset():
     persons = list()
     for p in personResults["results"]["bindings"]:
         persons.append({ "uri": p["uri"]["value"], "label": p["label"]["value"] })
-    return render_template("construct.html", persons = persons)
+    # Get a list of all place names, distinct among both datasets
+    selectPlacesQuery = open(app.config["ELEPHANT_QUERY_DIR"] + "select_places.rq").read()
+    sparql.setQuery(selectPlacesQuery)
+    placeResults = sparql.query().convert()
+    places = list()
+    for p in placeResults["results"]["bindings"]:
+        places.append(p["place"]["value"])
+    return render_template("construct.html", persons = persons, places = places)
 
 
 

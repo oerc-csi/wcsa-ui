@@ -5,8 +5,11 @@
     </head>
     <body>
        <div id="includedInQuery">
-           Currently included in workset:<br/>
+           <span class="personsIncludedHeader">Persons currently included in workset:</span>
            <div id="personsInQuery"> </div>
+           <span class="placesIncludedHeader">Publication places currently included in workset:</span>
+           <div id="placesInQuery"> </div>
+           <div id="notPlacesInQuery"> </div>
            <span class="button">Create workset</span>
            <br/>
        </div>
@@ -16,14 +19,26 @@
                     <input type="text" id="person" onKeyUp="personInput(this)">
                     <div id="qpersons">
                     </div>
+                   <div class="controls">
+                      <span class="button" onclick="includeSelectedPersons(this)">Add selected</span>
+                      <span class="button" onclick="includeListedPersons(this)">Add all listed</span>
+                  </div>
+                   <div class="preview">
+                       <div class = "persons"></div>
+                   </div>
                 </div>
-           </div>
-           <div class="controls">
-              <span class="button" onclick="includeSelected(this)">Add selected</span>
-              <span class="button" onclick="includeListed(this)">Add all listed</span>
-          </div>
-           <div id="preview">
-               <div class = "persons"></div>
+                <div id="qplace">
+                    <input type="text" id="place" onKeyUp="placeInput(this)">
+                    <div id="qplaces">
+                    </div>
+                   <div class="controls">
+                      <span class="button" onclick="includeSelectedPlaces(this)">Add selected</span>
+                      <span class="button" onclick="includeListedPlaces(this)">Add all listed</span>
+                  </div>
+                   <div class="preview">
+                       <div class = "places"></div>
+                   </div>
+                </div>
            </div>
        </div>
         <script>
@@ -35,6 +50,15 @@
                     {% set delim = "," %}
                 {% endfor %}
             }
+        
+            {# build a JSON object that contains all publication place names, so we can access them from the query interface #}
+            var places = [ 
+                {% set delim = "" %}
+                {% for p in places %} 
+                    {{ delim }} "{{ p|safe }}"
+                    {% set delim = "," %}
+                {% endfor %}
+            ]
         </script>
     </body>
 </html>

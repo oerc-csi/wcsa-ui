@@ -56,35 +56,35 @@ body {
     overflow-y:auto;
 }
 
-.pperson span:hover { 
+.preview div div span:hover { 
     cursor:pointer;
 }
 
-.pperson i { 
+.preview div div i { 
     cursor:pointer;
 }
 
-.pperson .fa-eye, .pperson .fa-eye-slash { 
+.preview div div .fa-eye, .preview div div .fa-eye-slash { 
     visibility:hidden;
 }
-.pperson:hover .fa-eye, .pperson:hover .fa-eye-slash {
+.preview div div:hover .fa-eye, .preview div div:hover .fa-eye-slash {
     visibility:visible;
     color:#cccccc;
 }
 
 
-.pperson.unlisted span { 
+.preview div div.unlisted span { 
     cursor:default !important;
     color:#aaaaaa !important;
     text-decoration:line-through;
     pointer-events:none;
 }
 
-.pperson.selected span { 
+.preview div div.selected span { 
     color:#669966 !important;
 }
 
-.pperson.selected .fa-eye-slash { 
+.preview div div.selected .fa-eye-slash { 
     visibility:hidden !important;
 }
 
@@ -100,10 +100,31 @@ body {
     border: 1px solid black;
 }
 
-#personsInQuery div { 
+#includedInQuery div { 
+    max-height:10em;
+    overflow-y:auto;
+}
+
+
+#includedInQuery div div { 
     cursor:pointer;
 }
 
-#personsInQuery div:hover { 
+#includedInQuery div div:hover { 
     color:#996666;
+}
+
+#personsInQuery { 
+    background:#f0fff0;
+}
+
+#placesInQuery { 
+    background:#f0f0ff;
+}
+
+.preview { 
+    margin:5px;
+    border-bottom: 1px solid black;
+    max-height:10em;
+    overflow-y:auto;
 }
