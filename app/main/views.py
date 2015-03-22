@@ -84,7 +84,21 @@ def construct_workset():
     places = list()
     for p in placeResults["results"]["bindings"]:
         places.append(p["place"]["value"])
-    return render_template("construct.html", persons = persons, places = places)
+    # Get a list of all subject strings in HTRC
+    selectSubjectsQuery = open(app.config["ELEPHANT_QUERY_DIR"] + "select_subjects.rq").read()
+    sparql.setQuery(selectSubjectsQuery)
+    subjectResults = sparql.query().convert()
+    subjects = list()
+    for p in subjectResults["results"]["bindings"]:
+        subjects.append(p["subject"]["value"].replace("\n",""))
+    # Get a list of all genre strings in HTRC
+    selectGenresQuery = open(app.config["ELEPHANT_QUERY_DIR"] + "select_genres.rq").read()
+    sparql.setQuery(selectGenresQuery)
+    genreResults = sparql.query().convert()
+    genres = list()
+    for p in genreResults["results"]["bindings"]:
+        genres.append(p["genre"]["value"])
+    return render_template("construct.html", persons = persons, places = places, subjects = subjects, genres = genres)
 
 
 

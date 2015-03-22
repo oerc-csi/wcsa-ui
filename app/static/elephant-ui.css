@@ -6,6 +6,11 @@ body {
     margin-bottom: 15px;
 }
 
+.constructor-head { 
+    font-size: 1.6em;
+    margin-bottom: 5px;
+}
+
 .header { 
     font-size: 1.3em;
 }
@@ -92,19 +97,21 @@ body {
     visibility:hidden;
 }
 
-#querybuilder { 
+
+#querybox .queryitem { 
+    margin-bottom: 10px;
     border: 1px solid black;
 }
 
 #includedInQuery { 
     border: 1px solid black;
+    margin-bottom:10px;
 }
 
 #includedInQuery div { 
     max-height:10em;
     overflow-y:auto;
 }
-
 
 #includedInQuery div div { 
     cursor:pointer;
@@ -114,17 +121,29 @@ body {
     color:#996666;
 }
 
-#personsInQuery { 
+#qperson, #personsInQuery { 
     background:#f0fff0;
 }
 
-#placesInQuery { 
+#qplace, #placesInQuery { 
     background:#f0f0ff;
+}
+
+#qsubject, #subjectsInQuery { 
+    background:#fff0f0;
+}
+
+#qgenre, #genresInQuery { 
+    background:#f0ffff;
 }
 
 .preview { 
     margin:5px;
-    border-bottom: 1px solid black;
+    /*border-bottom: 1px solid black;*/
     max-height:10em;
     overflow-y:auto;
+}
+
+.preview.last { 
+    border-bottom: none !important;
 }

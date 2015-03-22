@@ -4,18 +4,25 @@
         <title> Elephant Workset Constructor </title>
     </head>
     <body>
-       <div id="includedInQuery">
-           <span class="personsIncludedHeader">Persons currently included in workset:</span>
+        <div class="constructor-head">Current Query (Workset Parameters)</div>
+        <div id="includedInQuery">
+           <span class="personsIncludedHeader">Include only works by these <em>persons</em> in the workset:</span>
            <div id="personsInQuery"> </div>
-           <span class="placesIncludedHeader">Publication places currently included in workset:</span>
+           <span class="placesIncludedHeader">Include only works with these <em>publication places</em> in the workset:</span>
            <div id="placesInQuery"> </div>
            <div id="notPlacesInQuery"> </div>
+           <span class="subjectsIncludedHeader">Include only works by authors who have written on these <em>subjects</em> in the workset:</span>
+           <div id="subjectsInQuery"> </div>
+           <span class="genresIncludedHeader">Include only works by authors who have written in these <em>genres</em> in the workset:</span>
+           <div id="genresInQuery"> </div>
            <span class="button">Create workset</span>
            <br/>
        </div>
+        <div class="constructor-head">Query Builder</div>
         <div id="querybuilder">
             <div id="querybox">
-                <div id="qperson">
+                <div class="queryitem" id="qperson">
+                    Person<br/>
                     <input type="text" id="person" onKeyUp="personInput(this)">
                     <div id="qpersons">
                     </div>
@@ -27,7 +34,8 @@
                        <div class = "persons"></div>
                    </div>
                 </div>
-                <div id="qplace">
+                <div class="queryitem" id="qplace">
+                    Place<br/>
                     <input type="text" id="place" onKeyUp="placeInput(this)">
                     <div id="qplaces">
                     </div>
@@ -37,6 +45,32 @@
                   </div>
                    <div class="preview">
                        <div class = "places"></div>
+                   </div>
+                </div>
+                <div class="queryitem" id="qsubject">
+                    Subject<br/>
+                    <input type="text" id="subject" onKeyUp="subjectInput(this)">
+                    <div id="qsubjects">
+                    </div>
+                   <div class="controls">
+                      <span class="button" onclick="includeSelectedSubjects(this)">Add selected</span>
+                      <span class="button" onclick="includeListedSubjects(this)">Add all listed</span>
+                  </div>
+                   <div class="preview">
+                       <div class = "subjects"></div>
+                   </div>
+                </div>
+                <div class="queryitem" id="qgenre">
+                    Genre<br/>
+                    <input type="text" id="genre" onKeyUp="genreInput(this)">
+                    <div id="qgenres">
+                    </div>
+                   <div class="controls">
+                      <span class="button" onclick="includeSelectedGenres(this)">Add selected</span>
+                      <span class="button" onclick="includeListedGenres(this)">Add all listed</span>
+                  </div>
+                   <div class="preview last">
+                       <div class = "genres"></div>
                    </div>
                 </div>
            </div>
@@ -49,7 +83,7 @@
                     {{ delim }} "{{ p["label"]|safe }}": "{{ p["uri"]|safe }}"
                     {% set delim = "," %}
                 {% endfor %}
-            }
+            };
         
             {# build a JSON object that contains all publication place names, so we can access them from the query interface #}
             var places = [ 
@@ -58,7 +92,25 @@
                     {{ delim }} "{{ p|safe }}"
                     {% set delim = "," %}
                 {% endfor %}
-            ]
+            ];
+
+            {# build a JSON object that contains all publication subject names, so we can access them from the query interface #}
+            var subjects = [ 
+                {% set delim = "" %}
+                {% for s in subjects %} 
+                    {{ delim }} "{{ s|safe }}"
+                    {% set delim = "," %}
+                {% endfor %}
+            ];
+            
+            {# build a JSON object that contains all publication genre names, so we can access them from the query interface #}
+            var genres = [ 
+                {% set delim = "" %}
+                {% for g in genres %} 
+                    {{ delim }} "{{ g|safe }}"
+                    {% set delim = "," %}
+                {% endfor %}
+            ];
         </script>
     </body>
 </html>

@@ -1,0 +1,11 @@
+PREFIX saltset: <http://127.0.0.1:8890/saltsets/>
+PREFIX salt: <http://127.0.0.1:8890/salt/>
+PREFIX eeboo: <http://eeboo.oerc.ox.ac.uk/>
+PREFIX : <http://127.0.0.1:8890/>
+
+SELECT DISTINCT ?genre
+WHERE { 
+    ?work <http://www.loc.gov/mods/rdf/v1#genre> ?gen . 
+    ?gen rdfs:label ?genre .
+}
+order by ?genre

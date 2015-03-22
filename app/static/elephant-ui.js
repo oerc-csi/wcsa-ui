@@ -5,7 +5,7 @@ function personInput(thisItem) {
     if (val.length > 2) {  // don't fire on short input to prevent enormous lists
         var re = new RegExp(val, "i");
         personNames = Object.keys(persons)
-        includePersons = personNames.filter(function(val) { 
+        var includePersons = personNames.filter(function(val) { 
             return re.test(val);
         });
         previewHtml = "";
@@ -40,6 +40,52 @@ function placeInput(thisItem) {
     }
 
     $("#qplace .preview .places").html(previewHtml);
+}
+
+function subjectInput(thisItem) { 
+    var val = $(thisItem).val();
+    previewHtml = "";
+    $("#qsubject .controls .button").css("visibility", "hidden");
+    if (val.length > 2) {  // dont fire on short input to prevent enormous lists
+        var re = new RegExp(val, "i");
+        var includeSubjects = [];
+        for (var p in subjects) { 
+            if(re.test(subjects[p])) { 
+                includeSubjects.push(subjects[p]);
+            }
+        };
+        previewHtml = "";
+        for(var iP in includeSubjects) { 
+            previewHtml += '<div class="psubject" title="' + includeSubjects[iP] + '"> '+ '<i class="fa fa-eye-slash" onclick="toggleListExclusion(this)"></i> <span onclick="toggleSelect(this)">' + includeSubjects[iP] + '</span></div>\n';
+        }
+        $("#qsubject .preview .subjects").html(previewHtml);
+        $("#qsubject .controls .button").css("visibility", "visible");
+    }
+
+    $("#qsubject .preview .subjects").html(previewHtml);
+}
+
+function genreInput(thisItem) { 
+    var val = $(thisItem).val();
+    previewHtml = "";
+    $("#qgenre .controls .button").css("visibility", "hidden");
+    if (val.length > 2) {  // dont fire on short input to prevent enormous lists
+        var re = new RegExp(val, "i");
+        var includeGenres = [];
+        for (var p in genres) { 
+            if(re.test(genres[p])) { 
+                includeGenres.push(genres[p]);
+            }
+        };
+        previewHtml = "";
+        for(var iP in includeGenres) { 
+            previewHtml += '<div class="pgenre" title="' + includeGenres[iP] + '"> '+ '<i class="fa fa-eye-slash" onclick="toggleListExclusion(this)"></i> <span onclick="toggleSelect(this)">' + includeGenres[iP] + '</span></div>\n';
+        }
+        $("#qgenre .preview .genres").html(previewHtml);
+        $("#qgenre .controls .button").css("visibility", "visible");
+    }
+
+    $("#qgenre .preview .genres").html(previewHtml);
 }
 
 function expandItems(thisItem) { 
@@ -77,34 +123,24 @@ function toggleListExclusion(element) {
     }
 }
 
-
 function includeSelectedPersons(element) { 
     // include all selected persons in our query
-    includedPersons = $("#personsInQuery").html();
-    alreadyIncluded = [];
-    $("#personsInQuery div").each(function() { 
-        alreadyIncluded.push($(this).attr("title"));
-    });
-    console.log(alreadyIncluded);
-    $("#qperson .preview .persons .pperson.selected").each(function() { 
-        if(alreadyIncluded.indexOf($(this).attr("title")) < 0) { 
-            // only if not already included
-            includedPersons += '<div title="' + $(this).attr("title") + '" onclick="removeFromQuery(this)"> Works by: ' + $(this).children("span").html() + '</div>\n';
-        }
-    });
-    $("#personsInQuery").html(includedPersons);
+    includePersons(element, "#qperson .preview .persons .pperson.selected");
 }
 
 function includeListedPersons(element) { 
     // include all listed persons in our query
-    // TODO refactor with above includeSelected function
+    includePersons(element, "#qperson .preview .persons .pperson:not(.unlisted)");
+}
+
+function includePersons(element, selector) { 
     includedPersons = $("#personsInQuery").html();
     alreadyIncluded = [];
     $("#personsInQuery div").each(function() { 
         alreadyIncluded.push($(this).attr("title"));
     });
     console.log(alreadyIncluded);
-    $("#qperson .preview .persons .pperson:not(.unlisted)").each(function() { 
+    $(selector).each(function() { 
         if(alreadyIncluded.indexOf($(this).attr("title")) < 0) { 
             // only if not already included
             includedPersons += '<div title="' + $(this).attr("title") + '" onclick="removeFromQuery(this)"> Works by: ' + $(this).children("span").html() + '</div>\n';
@@ -113,39 +149,86 @@ function includeListedPersons(element) {
     $("#personsInQuery").html(includedPersons);
 }
 
-// TODO refactor all of these includeSelected and includeListed functions down to one
+
 function includeSelectedPlaces(element) { 
+    // include all selected places in our query
+    includePlaces(element, "#qplace .preview .places .pplace.selected");
+}
+
+function includeListedPlaces(element) { 
+    // include all listed places in our query
+    includePlaces(element, "#qplace .preview .places .pplace:not(.unlisted)");
+}
+
+function includePlaces(element, selector) { 
     // include all selected places in our query
     includedPlaces = $("#placesInQuery").html();
     alreadyIncluded = [];
     $("#placesInQuery div").each(function() { 
         alreadyIncluded.push($(this).attr("title"));
     });
-    console.log(alreadyIncluded);
-    $("#qplace .preview .places .pplace.selected").each(function() { 
+    $(selector).each(function() { 
         if(alreadyIncluded.indexOf($(this).attr("title")) < 0) { 
             // only if not already included
             includedPlaces += '<div title="' + $(this).children("span").html() + '" onclick="removeFromQuery(this)"> Publication place: ' + $(this).children("span").html() + '</div>\n';
         }
     });
     $("#placesInQuery").html(includedPlaces);
+
 }
 
-function includeListedPlaces(element) { 
-    // include all listed places in our query
-    // TODO refactor with above includeSelected function
-    includedPlaces = $("#placesInQuery").html();
+function includeSelectedSubjects(element) { 
+    // include all selected subjects in our query
+    includeSubjects(element, "#qsubject .preview .subjects .psubject.selected");
+}
+
+function includeListedSubjects(element) { 
+    // include all listed subjects in our query
+    includeSubjects(element, "#qsubject .preview .subjects .psubject:not(.unlisted)");
+}
+
+function includeSubjects(element, selector) { 
+    // include all selected subjects in our query
+    includedSubjects = $("#subjectsInQuery").html();
     alreadyIncluded = [];
-    $("#placesInQuery div").each(function() { 
+    $("#subjectsInQuery div").each(function() { 
         alreadyIncluded.push($(this).attr("title"));
     });
-    $("#qplace .preview .places .pplace:not(.unlisted)").each(function() { 
+    $(selector).each(function() { 
         if(alreadyIncluded.indexOf($(this).attr("title")) < 0) { 
             // only if not already included
-            includedPlaces += '<div title="' + $(this).children("span").html() + '" onclick="removeFromQuery(this)"> Publication place: ' + $(this).children("span").html() + '</div>\n';
+            includedSubjects += '<div title="' + $(this).children("span").html() + '" onclick="removeFromQuery(this)"> Publication subject: ' + $(this).children("span").html() + '</div>\n';
         }
     });
-    $("#placesInQuery").html(includedPlaces);
+    $("#subjectsInQuery").html(includedSubjects);
+
+}
+
+function includeSelectedGenres(element) { 
+    // include all selected genres in our query
+    includeGenres(element, "#qgenre .preview .genres .pgenre.selected");
+}
+
+function includeListedGenres(element) { 
+    // include all listed genres in our query
+    includeGenres(element, "#qgenre .preview .genres .pgenre:not(.unlisted)");
+}
+
+function includeGenres(element, selector) { 
+    // include all selected genres in our query
+    includedGenres = $("#genresInQuery").html();
+    alreadyIncluded = [];
+    $("#genresInQuery div").each(function() { 
+        alreadyIncluded.push($(this).attr("title"));
+    });
+    $(selector).each(function() { 
+        if(alreadyIncluded.indexOf($(this).attr("title")) < 0) { 
+            // only if not already included
+            includedGenres += '<div title="' + $(this).children("span").html() + '" onclick="removeFromQuery(this)"> Publication genre: ' + $(this).children("span").html() + '</div>\n';
+        }
+    });
+    $("#genresInQuery").html(includedGenres);
+
 }
 
 function removeFromQuery(element) { 
@@ -158,4 +241,6 @@ function removeFromQuery(element) {
 $(document).ready(function() { 
     $("#person").val("");
     $("#place").val("");
+    $("#subject").val("");
+    $("#genre").val("");
 });
