@@ -2,6 +2,7 @@ function personInput(thisItem) {
     var val = $(thisItem).val();
     previewHtml = "";
     $("#qperson .controls .button").css("visibility", "hidden");
+    $("#qperson .preview").css("display", "none");
     if (val.length > 2) {  // don't fire on short input to prevent enormous lists
         var re = new RegExp(val, "i");
         personNames = Object.keys(persons)
@@ -13,7 +14,10 @@ function personInput(thisItem) {
             previewHtml += '<div class="pperson" title="' + persons[includePersons[p]] + '"> '+ '<i class="fa fa-eye-slash" onclick="toggleListExclusion(this)"></i> <span onclick="toggleSelect(this)">' + includePersons[p] + '</span></div>\n';
         }
         $("#qperson .preview .persons").html(previewHtml);
-        $("#qperson .controls .button").css("visibility", "visible");
+        if(includePersons.length) { 
+            $("#qperson .controls .button").css("visibility", "visible");
+            $("#qperson .preview").css("display", "block");
+        }
     }
 
     $(".preview .persons").html(previewHtml);
@@ -23,6 +27,7 @@ function placeInput(thisItem) {
     var val = $(thisItem).val();
     previewHtml = "";
     $("#qplace .controls .button").css("visibility", "hidden");
+    $("#qplace .preview").css("display", "none");
     if (val.length > 2) {  // dont fire on short input to prevent enormous lists
         var re = new RegExp(val, "i");
         var includePlaces = [];
@@ -36,7 +41,10 @@ function placeInput(thisItem) {
             previewHtml += '<div class="pplace" title="' + includePlaces[iP] + '"> '+ '<i class="fa fa-eye-slash" onclick="toggleListExclusion(this)"></i> <span onclick="toggleSelect(this)">' + includePlaces[iP] + '</span></div>\n';
         }
         $("#qplace .preview .places").html(previewHtml);
-        $("#qplace .controls .button").css("visibility", "visible");
+        if(includePlaces.length) { 
+            $("#qplace .controls .button").css("visibility", "visible");
+            $("#qplace .preview").css("display", "block");
+        }
     }
 
     $("#qplace .preview .places").html(previewHtml);
@@ -46,6 +54,7 @@ function subjectInput(thisItem) {
     var val = $(thisItem).val();
     previewHtml = "";
     $("#qsubject .controls .button").css("visibility", "hidden");
+    $("#qsubject .preview").css("display", "none");
     if (val.length > 2) {  // dont fire on short input to prevent enormous lists
         var re = new RegExp(val, "i");
         var includeSubjects = [];
@@ -59,7 +68,10 @@ function subjectInput(thisItem) {
             previewHtml += '<div class="psubject" title="' + includeSubjects[iP] + '"> '+ '<i class="fa fa-eye-slash" onclick="toggleListExclusion(this)"></i> <span onclick="toggleSelect(this)">' + includeSubjects[iP] + '</span></div>\n';
         }
         $("#qsubject .preview .subjects").html(previewHtml);
-        $("#qsubject .controls .button").css("visibility", "visible");
+        if(includeSubjects.length) {
+            $("#qsubject .controls .button").css("visibility", "visible");
+            $("#qsubject .preview").css("display", "block");
+        }
     }
 
     $("#qsubject .preview .subjects").html(previewHtml);
@@ -69,6 +81,7 @@ function genreInput(thisItem) {
     var val = $(thisItem).val();
     previewHtml = "";
     $("#qgenre .controls .button").css("visibility", "hidden");
+    $("#qgenre .preview").css("display", "none");
     if (val.length > 2) {  // dont fire on short input to prevent enormous lists
         var re = new RegExp(val, "i");
         var includeGenres = [];
@@ -82,7 +95,10 @@ function genreInput(thisItem) {
             previewHtml += '<div class="pgenre" title="' + includeGenres[iP] + '"> '+ '<i class="fa fa-eye-slash" onclick="toggleListExclusion(this)"></i> <span onclick="toggleSelect(this)">' + includeGenres[iP] + '</span></div>\n';
         }
         $("#qgenre .preview .genres").html(previewHtml);
-        $("#qgenre .controls .button").css("visibility", "visible");
+        if(includeGenres.length) { 
+            $("#qgenre .controls .button").css("visibility", "visible");
+            $("#qgenre .preview").css("display", "block");
+        }
     }
 
     $("#qgenre .preview .genres").html(previewHtml);
@@ -243,4 +259,5 @@ $(document).ready(function() {
     $("#place").val("");
     $("#subject").val("");
     $("#genre").val("");
+    $(".preview").css("display", "none");
 });

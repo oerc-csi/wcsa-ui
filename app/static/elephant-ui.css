@@ -97,10 +97,29 @@ body {
     visibility:hidden;
 }
 
+#querybox .queryitemlabel { 
+    position:relative;
+    float:left;
+    transform: rotate(-90deg);
+    transform-origin: left bottom 0;
+    bottom:-40px;
+    width: 1em;
+}
+
 
 #querybox .queryitem { 
+    position:relative;
     margin-bottom: 10px;
     border: 1px solid black;
+}
+
+#querybox input { 
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+#querybox .button { 
+    margin-left: 1em;
 }
 
 #includedInQuery { 
@@ -138,8 +157,13 @@ body {
 }
 
 .preview { 
+    clear:both;
+    position:relative;
     margin:5px;
-    /*border-bottom: 1px solid black;*/
+    border-top: 1px solid black;
+}
+.preview div{ 
+    position:relative;
     max-height:10em;
     overflow-y:auto;
 }
