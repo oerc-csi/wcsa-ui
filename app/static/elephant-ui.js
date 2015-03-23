@@ -116,6 +116,7 @@ function dateInput(element) {
         '" data-datetype="' + datetype + '" data-daterelation="' + daterelation + 
         '" data-date="' + date + '" >' + datestr + '</div>';
     $("#datesInQuery").html(includeDates);
+    $("#date").val("");
 
     
 }

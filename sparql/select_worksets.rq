@@ -3,7 +3,7 @@ PREFIX dct: <http://purl.org/dc/terms/>
 PREFIX mods: <http://www.loc.gov/mods/rdf/v1#>
 PREFIX salt: <http://127.0.0.1:8890/salt/>
 PREFIX eeboo: <http://eeboo.oerc.ox.ac.uk/eeboo/>
-SELECT DISTINCT * 
+SELECT DISTINCT ?workset ?uri ?urilocal ?mod_date ?title ?abstract ?username ?work ?worktitle ?author ?creator ?pubdate ?datePrecision ?place ?imprint ?elecLoc ?viaf ?loc ?saltset 
 WHERE {{
     {0}
     ?workset a ht:Workset ;
@@ -19,14 +19,24 @@ WHERE {{
               eeboo:raw_pubplace ?place ;
               eeboo:creator ?creator .
         ?creator rdfs:label ?author . 
-          OPTIONAL {{ 
+        ?work mods:publisher ?publisherbnode .
+        ?publisherbnode rdfs:label ?publisher .
+        BIND(COALESCE(?publisher, "") as ?imprint) .
+        ?work eeboo:electronicLocation ?elecLoc .
+        OPTIONAL {{ 
+           ?creator eeboo:hasExternalAuthorityVIAF ?viafid .
+           ?creator eeboo:hasExternalAuthorityLoC ?locid .
+        }}
+        BIND(COALESCE(?viafid, "") as ?viaf) .
+        BIND(COALESCE(?locid, "") as ?loc) .
+        OPTIONAL {{ 
             ?work eeboo:precise-publication ?precisepub .
             BIND("" as ?pubDatePrecision) . 
-          }}
-          OPTIONAL {{ 
+        }}
+        OPTIONAL {{ 
             ?work eeboo:approx-publication ?approxpub .
             BIND("(approx.)" as ?pubDatePrecision) .
-          }}
+        }}
     
         BIND(COALESCE(STR(YEAR(COALESCE(?precisepub, ?approxpub))), "Unknown") as ?pubdate ).
         BIND(COALESCE(?pubDatePrecision, "") as ?datePrecision) . 
@@ -43,9 +53,16 @@ WHERE {{
         ?titlebnode rdfs:label ?worktitle .
         FILTER(?worktitle != "ESTC" && ?worktitle != "Wing (2nd ed.)" && ?worktitle != "Wing (2nd ed., 1994)") . #TODO what are these?
         ?work  dc:creator ?creator ;
-                mods:statementOfResponsibility ?imprint . 
+                mods:statementOfResponsibility ?publisher;
+                mods:locationOfResource ?locbnode1 .
+        BIND(COALESCE(?publisher, "") as ?imprint) .
+        ?locbnode1 mods:locationCopy ?locbnode2 .
+        ?locbnode2 mods:locationCopyElectronicLocator ?elecLocStr .
+        BIND(IRI(?elecLocStr) as ?elecLoc) .
         ?creator rdfs:label ?author .
         BIND("" as ?datePrecision) .
+        BIND("" as ?viaf) .
+        BIND("" as ?loc) .
               
     }} .
 }}

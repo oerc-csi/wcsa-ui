@@ -24,6 +24,11 @@ body {
     cursor:pointer;
 }
 
+.button a { 
+    text-decoration:none;
+    color:inherit;
+}
+
 .workset-metadata { 
     font-size: 1.2em;
 }
@@ -48,8 +53,10 @@ body {
 }
 
 .work { 
-    margin-top: 5px;
+    margin-top: 15px;
+    padding:10px;
     border: 1px solid black; 
+    border-radius:10px;
 }
 
 .itemheader { 
@@ -185,5 +192,28 @@ body {
 
 .preview span:hover {
     color:#cccccc;
+}
+
+.bubble { 
+    font-size: 50%;
+    font-family: sans-serif;
+    border-width:1px;
+    border-style: solid;
+}
+
+.bubble .eebo {
+    color:#ff3333;
+}
+
+.bubble .ht {
+    color:#33ff33;
+}
+
+.bubble .viaf { 
+    color:#cccccc;
+}
+
+.bubble .loc{ 
+    color:#666666;
 }
 

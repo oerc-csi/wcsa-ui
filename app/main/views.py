@@ -57,6 +57,10 @@ def select_worksets(specific_workset = ""):
                 "pubdate": result["pubdate"]["value"],
                 "datePrecision": result["datePrecision"]["value"],
                 "place": result["place"]["value"],
+#                "imprint": result["imprint"]["value"],
+                "elecLoc": result["elecLoc"]["value"],
+                "viaf": result["viaf"]["value"],
+                "loc": result["loc"]["value"],
                 "saltset":saltset
             }) 
     
