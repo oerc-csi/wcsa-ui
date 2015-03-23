@@ -6,16 +6,16 @@
     <body>
         <div class="constructor-head">Current Workset Parameters</div>
         <div id="includedInQuery">
-           <span class="personsIncludedHeader">Include only works by these <em>persons</em> in the workset:</span>
+           <span id="personsIncludedHeader">Include only works by these <em>persons</em> in the workset:</span>
            <div id="personsInQuery"> </div>
-           <span class="placesIncludedHeader">Include only works with these <em>publication places</em> in the workset:</span>
+           <span id="placesIncludedHeader">Include only works with these <em>publication places</em> in the workset:</span>
            <div id="placesInQuery"> </div>
            <div id="notPlacesInQuery"> </div>
-           <span class="subjectsIncludedHeader">Include only works by authors who have written on these <em>subjects</em> in the workset:</span>
+           <span id="subjectsIncludedHeader">Include only works by authors who have written on these <em>subjects</em> in the workset:</span>
            <div id="subjectsInQuery"> </div>
-           <span class="genresIncludedHeader">Include only works by authors who have written in these <em>genres</em> in the workset:</span>
+           <span id="genresIncludedHeader">Include only works by authors who have written in these <em>genres</em> in the workset:</span>
            <div id="genresInQuery"> </div>
-           <span class="datesIncludedHeader">Limit by <em>date</em>:</span>
+           <span id="datesIncludedHeader">Limit by <em>date</em>:</span>
            <div id="datesInQuery"> </div>
            <br/>
        </div>
@@ -99,7 +99,16 @@
                 </div>
            </div>
        </div>
-       <span class="button">Create workset</span>
+       <div class="constructor-head">Workset Description</div>
+       <div class="workset-metadata-input">
+           <div>Title:</div>
+           <input type="text" id="workset-title" name="workset-title"><br/>
+           <div>Abstract:</div>
+           <textarea id="workset-abstract" name="workset-abstract"></textarea>
+       </div>
+
+        <span class="button">Create workset</span>
+        <span class="button back"><a href="/">Back to viewer</a></span>
         <script>
             {# build a JSON object that contains all EEBOO Persons, so that we can access them from the query interface #}
             var persons = { 

@@ -6,9 +6,17 @@ body {
     margin-bottom: 15px;
 }
 
+.collection .item { 
+    border:1px solid black;
+    border-radius:10px;
+    padding:10px;
+    margin:10px;
+}
+
 .constructor-head { 
     font-size: 1.6em;
     margin-bottom: 5px;
+    margin-top: 10px;
 }
 
 .header { 
@@ -27,6 +35,10 @@ body {
 .button a { 
     text-decoration:none;
     color:inherit;
+}
+
+.button.back { 
+    float:right;
 }
 
 .workset-metadata { 
@@ -120,6 +132,7 @@ body {
     position:relative;
     margin-bottom: 10px;
     border: 1px solid black;
+    border-radius:10px;
 }
 
 #querybox input { 
@@ -133,6 +146,9 @@ body {
 
 #includedInQuery { 
     border: 1px solid black;
+    border-radius:10px;
+    padding:10px;
+    min-height:5em;
     margin-bottom:10px;
 }
 
@@ -195,25 +211,64 @@ body {
 }
 
 .bubble { 
-    font-size: 50%;
-    font-family: sans-serif;
+    font-size: 70%;
+    font-family: monospace !important;
     border-width:1px;
     border-style: solid;
+    padding:2px;
+    vertical-align: 30%;
+    border-radius: 10px;
+    background:#dddddd;
+    text-align:center;
 }
 
-.bubble .eebo {
-    color:#ff3333;
+.ui-head .bubble {
+    font-size: 45%;
 }
 
-.bubble .ht {
-    color:#33ff33;
+.header .bubble { 
+    font-size: 55%;
 }
 
-.bubble .viaf { 
-    color:#cccccc;
+a.bubble { 
+    text-decoration:none !important;
 }
 
-.bubble .loc{ 
-    color:#666666;
+.bubble.uri { 
+    padding-left:4px;
+    padding-right:4px;
 }
 
+.bubble.eebo {
+    background:#ffff00;
+}
+
+.bubble.ht {
+    background:#ffbb33;
+}
+
+.bubble.viaf { 
+    background:#cccccc;
+}
+
+.bubble.loc{ 
+    padding-left:4px;
+    padding-right:4px;
+    background:#dddddd;
+}
+
+.workset-metadata-input { 
+    margin-bottom:20px;
+}
+.workset-metadata-input div{ 
+    margin-top: 10px;
+}
+
+.workset-metadata-input input, .workset-metadata-input textarea { 
+    width:100%;
+}
+
+.workset-metadata-input textarea { 
+    height:8em;
+    resize:vertical;
+}

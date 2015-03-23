@@ -7,9 +7,8 @@
         <div class = "ui-head">Elephant Workset Viewer</div>
         <div class = "collection">
             {% for workset in worksets %}
-            <hr/>
             <div class = "item">
-                <div class = "header" title=" {{ worksets[workset]["uri"]|safe }}">{{ worksets[workset]["title"]|safe }}</div>
+                <div class = "header" title=" {{ worksets[workset]["uri"]|safe }}">{{ worksets[workset]["title"]|safe }} <span class="bubble uri">URI</span></div>
                 <ul class="workset-metadata">
                     <li> <a href="{{ worksets[workset]["urilocal"]|safe }}" title="Click to open detailed workset view">
                         Open in workset viewer </a></li>

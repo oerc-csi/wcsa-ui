@@ -105,6 +105,7 @@ function genreInput(thisItem) {
 }
 
 function dateInput(element) { 
+    $("#datesIncludedHeader").css("display", "none");
     var datetype = $("#datetype").val();
     var datetypestr = $("#datetype :selected").html();
     var daterelation = $("#daterelation").val();
@@ -116,6 +117,9 @@ function dateInput(element) {
         '" data-datetype="' + datetype + '" data-daterelation="' + daterelation + 
         '" data-date="' + date + '" >' + datestr + '</div>';
     $("#datesInQuery").html(includeDates);
+    if(includeDates) { 
+        $("#datesIncludedHeader").css("display", "block");
+    }
     $("#date").val("");
 
     
@@ -167,12 +171,12 @@ function includeListedPersons(element) {
 }
 
 function includePersons(element, selector) { 
+    $("#personsIncludedHeader").css("display", "none");
     includedPersons = $("#personsInQuery").html();
     alreadyIncluded = [];
     $("#personsInQuery div").each(function() { 
         alreadyIncluded.push($(this).attr("title"));
     });
-    console.log(alreadyIncluded);
     $(selector).each(function() { 
         if(alreadyIncluded.indexOf($(this).attr("title")) < 0) { 
             // only if not already included
@@ -180,6 +184,9 @@ function includePersons(element, selector) {
         }
     });
     $("#personsInQuery").html(includedPersons);
+    if(includedPersons) { 
+        $("#personsIncludedHeader").css("display", "block");
+    }
 }
 
 
@@ -194,7 +201,7 @@ function includeListedPlaces(element) {
 }
 
 function includePlaces(element, selector) { 
-    // include all selected places in our query
+    $("#placesIncludedHeader").css("display", "none");
     includedPlaces = $("#placesInQuery").html();
     alreadyIncluded = [];
     $("#placesInQuery div").each(function() { 
@@ -206,6 +213,9 @@ function includePlaces(element, selector) {
             includedPlaces += '<div title="' + $(this).children("span").html() + '" onclick="removeFromQuery(this)"> Publication place: ' + $(this).children("span").html() + '</div>\n';
         }
     });
+    if(includedPlaces) { 
+        $("#placesIncludedHeader").css("display", "block");
+    }
     $("#placesInQuery").html(includedPlaces);
 
 }
@@ -221,7 +231,7 @@ function includeListedSubjects(element) {
 }
 
 function includeSubjects(element, selector) { 
-    // include all selected subjects in our query
+    $("#subjectsIncludedHeader").css("display", "none");
     includedSubjects = $("#subjectsInQuery").html();
     alreadyIncluded = [];
     $("#subjectsInQuery div").each(function() { 
@@ -233,6 +243,9 @@ function includeSubjects(element, selector) {
             includedSubjects += '<div title="' + $(this).children("span").html() + '" onclick="removeFromQuery(this)"> Publication subject: ' + $(this).children("span").html() + '</div>\n';
         }
     });
+    if(includedSubjects) { 
+        $("#subjectsIncludedHeader").css("display", "block");
+    }
     $("#subjectsInQuery").html(includedSubjects);
 
 }
@@ -248,7 +261,7 @@ function includeListedGenres(element) {
 }
 
 function includeGenres(element, selector) { 
-    // include all selected genres in our query
+    $("#genresIncludedHeader").css("display", "none");
     includedGenres = $("#genresInQuery").html();
     alreadyIncluded = [];
     $("#genresInQuery div").each(function() { 
@@ -260,6 +273,9 @@ function includeGenres(element, selector) {
             includedGenres += '<div title="' + $(this).children("span").html() + '" onclick="removeFromQuery(this)"> Publication genre: ' + $(this).children("span").html() + '</div>\n';
         }
     });
+    if(includedGenres) { 
+        $("#genresIncludedHeader").css("display", "block");
+    }
     $("#genresInQuery").html(includedGenres);
 
 }
@@ -277,5 +293,12 @@ $(document).ready(function() {
     $("#subject").val("");
     $("#genre").val("");
     $("#date").val("");
+    $("#workset-title").val("");
+    $("#workset-abstract").val("");
+    $("#personsIncludedHeader").css("display", "none");
+    $("#placesIncludedHeader").css("display", "none");
+    $("#subjectsIncludedHeader").css("display", "none");
+    $("#genresIncludedHeader").css("display", "none");
+    $("#datesIncludedHeader").css("display", "none");
     $(".preview").css("display", "none");
 });
