@@ -111,13 +111,16 @@ function dateInput(element) {
     var daterelation = $("#daterelation").val();
     var daterelationstr = $("#daterelation :selected").html();
     var date = $("#date").val();
+    if(!date) { 
+        return;
+    }
     datestr = "Dates: " + datetypestr + " " + daterelationstr + " " + date;
     var includeDates = $("#datesInQuery").html();
     includeDates += '<div onclick="removeFromQuery(this)" title="' + datestr + 
         '" data-datetype="' + datetype + '" data-daterelation="' + daterelation + 
         '" data-date="' + date + '" >' + datestr + '</div>';
     $("#datesInQuery").html(includeDates);
-    if(includeDates) { 
+    if(includeDates !== " ") { 
         $("#datesIncludedHeader").css("display", "block");
     }
     $("#date").val("");
@@ -184,7 +187,7 @@ function includePersons(element, selector) {
         }
     });
     $("#personsInQuery").html(includedPersons);
-    if(includedPersons) { 
+    if(includedPersons !== " ") { 
         $("#personsIncludedHeader").css("display", "block");
     }
 }
@@ -213,7 +216,7 @@ function includePlaces(element, selector) {
             includedPlaces += '<div title="' + $(this).children("span").html() + '" onclick="removeFromQuery(this)"> Publication place: ' + $(this).children("span").html() + '</div>\n';
         }
     });
-    if(includedPlaces) { 
+    if(includedPlaces !== " ") { 
         $("#placesIncludedHeader").css("display", "block");
     }
     $("#placesInQuery").html(includedPlaces);
@@ -243,7 +246,7 @@ function includeSubjects(element, selector) {
             includedSubjects += '<div title="' + $(this).children("span").html() + '" onclick="removeFromQuery(this)"> Publication subject: ' + $(this).children("span").html() + '</div>\n';
         }
     });
-    if(includedSubjects) { 
+    if(includedSubjects !== " ") { 
         $("#subjectsIncludedHeader").css("display", "block");
     }
     $("#subjectsInQuery").html(includedSubjects);
@@ -273,7 +276,7 @@ function includeGenres(element, selector) {
             includedGenres += '<div title="' + $(this).children("span").html() + '" onclick="removeFromQuery(this)"> Publication genre: ' + $(this).children("span").html() + '</div>\n';
         }
     });
-    if(includedGenres) { 
+    if(includedGenres !== " ") { 
         $("#genresIncludedHeader").css("display", "block");
     }
     $("#genresInQuery").html(includedGenres);
@@ -282,6 +285,11 @@ function includeGenres(element, selector) {
 
 function removeFromQuery(element) { 
     if(confirm("Removing from workset\n" + $(element).html() + "\nAre you sure?")) { 
+        if($(element).siblings("div").size() == 0) { 
+            // removed the last item of this type
+            // so hide the header
+            $(element).parent().prev("span").css("display", "none");
+        }   
         $(element).remove();
     }
 }
