@@ -24,7 +24,6 @@ body {
 
 .workset-metadata { 
     font-size: 1.2em;
-    height: 20%;
 }
 
 .works { 
@@ -86,7 +85,8 @@ body {
 }
 
 .preview div div.selected span { 
-    color:#669966 !important;
+    color:#000000 !important;
+    background:orange;
 }
 
 .preview div div.selected .fa-eye-slash { 
@@ -130,6 +130,7 @@ body {
 #includedInQuery div { 
     max-height:10em;
     overflow-y:auto;
+    color:#ffffff;
 }
 
 #includedInQuery div div { 
@@ -137,30 +138,37 @@ body {
 }
 
 #includedInQuery div div:hover { 
-    color:#996666;
+    color:#cccccc;
 }
 
+.queryitem { 
+    color:#ffffff;
+}
 #qperson, #personsInQuery { 
-    background:#f0fff0;
+    background:#509950;
 }
 
 #qplace, #placesInQuery { 
-    background:#f0f0ff;
+    background:#505099;
+}
+
+#qdate, #datesInQuery { 
+    background:#995099;
 }
 
 #qsubject, #subjectsInQuery { 
-    background:#fff0f0;
+    background:#995050;
 }
 
 #qgenre, #genresInQuery { 
-    background:#f0ffff;
+    background:#509999;
 }
 
 .preview { 
     clear:both;
     position:relative;
     margin:5px;
-    border-top: 1px solid black;
+    border-top: 1px solid orange;
 }
 .preview div{ 
     position:relative;
@@ -170,4 +178,8 @@ body {
 
 .preview.last { 
     border-bottom: none !important;
+}
+
+.preview span:hover {
+    color:#cccccc;
 }

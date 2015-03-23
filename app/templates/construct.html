@@ -4,7 +4,7 @@
         <title> Elephant Workset Constructor </title>
     </head>
     <body>
-        <div class="constructor-head">Current Query (Workset Parameters)</div>
+        <div class="constructor-head">Current Workset Parameters</div>
         <div id="includedInQuery">
            <span class="personsIncludedHeader">Include only works by these <em>persons</em> in the workset:</span>
            <div id="personsInQuery"> </div>
@@ -15,10 +15,9 @@
            <div id="subjectsInQuery"> </div>
            <span class="genresIncludedHeader">Include only works by authors who have written in these <em>genres</em> in the workset:</span>
            <div id="genresInQuery"> </div>
-           <span class="button">Create workset</span>
            <br/>
        </div>
-        <div class="constructor-head">Query Builder</div>
+        <div class="constructor-head">Workset Constructor</div>
         <div id="querybuilder">
             <div id="querybox">
                 <div class="queryitemlabel">Person</div>
@@ -45,6 +44,19 @@
                   </div>
                    <div class="preview">
                        <div class = "places"></div>
+                   </div>
+                </div>
+                <div class="queryitemlabel">Dates</div>
+                <div class="queryitem" id="qdate">
+                    <input type="text" id="date" onKeyUp="dateInput(this)">
+                    <div id="qdates">
+                    </div>
+                   <div class="controls">
+                      <span class="button" onclick="includeSelectedDates(this)">Add selected</span>
+                      <span class="button" onclick="includeListedDates(this)">Add all listed</span>
+                  </div>
+                   <div class="preview">
+                       <div class = "dates"></div>
                    </div>
                 </div>
                 <div class="queryitemlabel">Subject</div>
@@ -75,6 +87,7 @@
                 </div>
            </div>
        </div>
+       <span class="button">Create workset</span>
         <script>
             {# build a JSON object that contains all EEBOO Persons, so that we can access them from the query interface #}
             var persons = { 
