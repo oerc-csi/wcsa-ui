@@ -39,6 +39,7 @@ body {
 
 .button.back { 
     float:right;
+    font-size:initial;
 }
 
 .workset-metadata { 
