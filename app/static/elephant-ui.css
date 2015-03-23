@@ -239,6 +239,13 @@ a.bubble {
     padding-right:4px;
 }
 
+.bubble.ro{ 
+    background:#bbcccc;
+}
+.bubble.wcsa{ 
+    background:#bbbbcc;
+}
+
 .bubble.eebo {
     background:#ffff00;
 }
