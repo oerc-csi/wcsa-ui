@@ -18,7 +18,9 @@ body {
 .button { 
     position:relative;
     width:auto;
-    border: 1px solid orange;
+    border: 2px solid orange;
+    border-radius: 10px;
+    padding:3px;
     cursor:pointer;
 }
 
@@ -168,7 +170,8 @@ body {
     clear:both;
     position:relative;
     margin:5px;
-    border-top: 1px solid orange;
+    margin-top: .5em;
+    border-top: 2px solid white;
 }
 .preview div{ 
     position:relative;
@@ -183,3 +186,4 @@ body {
 .preview span:hover {
     color:#cccccc;
 }
+

@@ -104,6 +104,22 @@ function genreInput(thisItem) {
     $("#qgenre .preview .genres").html(previewHtml);
 }
 
+function dateInput(element) { 
+    var datetype = $("#datetype").val();
+    var datetypestr = $("#datetype :selected").html();
+    var daterelation = $("#daterelation").val();
+    var daterelationstr = $("#daterelation :selected").html();
+    var date = $("#date").val();
+    datestr = "Dates: " + datetypestr + " " + daterelationstr + " " + date;
+    var includeDates = $("#datesInQuery").html();
+    includeDates += '<div onclick="removeFromQuery(this)" title="' + datestr + 
+        '" data-datetype="' + datetype + '" data-daterelation="' + daterelation + 
+        '" data-date="' + date + '" >' + datestr + '</div>';
+    $("#datesInQuery").html(includeDates);
+
+    
+}
+
 function expandItems(thisItem) { 
     if($(thisItem).find("i").hasClass("fa-plus-square-o")) {
         // we need to expand the items
@@ -259,5 +275,6 @@ $(document).ready(function() {
     $("#place").val("");
     $("#subject").val("");
     $("#genre").val("");
+    $("#date").val("");
     $(".preview").css("display", "none");
 });

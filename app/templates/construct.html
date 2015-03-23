@@ -15,6 +15,8 @@
            <div id="subjectsInQuery"> </div>
            <span class="genresIncludedHeader">Include only works by authors who have written in these <em>genres</em> in the workset:</span>
            <div id="genresInQuery"> </div>
+           <span class="datesIncludedHeader">Limit by <em>date</em>:</span>
+           <div id="datesInQuery"> </div>
            <br/>
        </div>
         <div class="constructor-head">Workset Constructor</div>
@@ -46,19 +48,6 @@
                        <div class = "places"></div>
                    </div>
                 </div>
-                <div class="queryitemlabel">Dates</div>
-                <div class="queryitem" id="qdate">
-                    <input type="text" id="date" onKeyUp="dateInput(this)">
-                    <div id="qdates">
-                    </div>
-                   <div class="controls">
-                      <span class="button" onclick="includeSelectedDates(this)">Add selected</span>
-                      <span class="button" onclick="includeListedDates(this)">Add all listed</span>
-                  </div>
-                   <div class="preview">
-                       <div class = "dates"></div>
-                   </div>
-                </div>
                 <div class="queryitemlabel">Subject</div>
                 <div class="queryitem" id="qsubject">
                     <input type="text" id="subject" onKeyUp="subjectInput(this)">
@@ -81,8 +70,31 @@
                       <span class="button" onclick="includeSelectedGenres(this)">Add selected</span>
                       <span class="button" onclick="includeListedGenres(this)">Add all listed</span>
                   </div>
-                   <div class="preview last">
+                   <div class="preview">
                        <div class = "genres"></div>
+                   </div>
+                </div>
+                <div class="queryitemlabel">Dates</div>
+                <div class="queryitem" id="qdate">
+                    <select name="datetype" id="datetype">
+                        <option value="workpub" selected="selected">Work published</option>
+                        <option value="birth">Author born</option>
+                        <option value="death">Author died</option>
+                        <option value="fl-from">Author fl. from</option>
+                        <option value="fl-to">Author fl. until</option>
+                    </select>
+                    <select name="daterelation" id="daterelation">
+                        <option value="&equals;" selected="selected">during</option>
+                        <option value="<">before</option>
+                        <option value=">">after</option>
+                    </select>
+                    <input type="text" value="" size="4" maxlength="4" id="date" title="Format: YYYY"><span class="button" onclick="dateInput(this)">Add</span>
+                  <div class="controls">
+                      <span class="button" onclick="includeSelectedDates(this)">Add selected</span>
+                      <span class="button" onclick="includeListedDates(this)">Add all listed</span>
+                  </div>
+                   <div class="preview last">
+                       <div class = "dates"></div>
                    </div>
                 </div>
            </div>
