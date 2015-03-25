@@ -1,7 +1,7 @@
 PREFIX ht: <http://hathitrust.org/htrc/workset#>
 PREFIX dct: <http://purl.org/dc/terms/>
 PREFIX mods: <http://www.loc.gov/mods/rdf/v1#>
-PREFIX salt: <http://127.0.0.1:8890/salt/>
+PREFIX salt: <http://eeboo.oerc.ox.ac.uk/salt/>
 PREFIX eeboo: <http://eeboo.oerc.ox.ac.uk/eeboo/>
 SELECT DISTINCT ?workset ?uri ?urilocal ?mod_date ?title ?abstract ?username ?work ?worktitle ?author ?creator ?pubdate ?datePrecision ?place ?imprint ?elecLoc ?viaf ?loc ?saltset 
 WHERE {{

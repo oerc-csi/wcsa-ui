@@ -6,12 +6,12 @@ prefix ht: <http://hathitrust.org/htrc/workset#>
 prefix prov: <http://www.w3.org/ns/prov#> 
 prefix eeProv: <http://eeboo.oerc.ox.ac.uk/eeProv/> 
 prefix eeboo: <http://eeboo.oerc.ox.ac.uk/eeboo/>
-PREFIX salt: <http://127.0.0.1:8890/salt/>
-PREFIX saltset: <http://127.0.0.1:8890/saltsets/>
-PREFIX : <http://127.0.0.1:8890/>
+PREFIX salt: <http://eeboo.oerc.ox.ac.uk/salt/>
+PREFIX saltset: <http://eeboo.oerc.ox.ac.uk/saltsets/>
+PREFIX : <http://eeboo.oerc.ox.ac.uk/>
 
 INSERT {
-    GRAPH <http://127.0.0.1:8890/worksets> { 
+    GRAPH <http://eeboo.oerc.ox.ac.uk/worksets> { 
         <http://hathitrust.org/htrc/workset/sample-data>
           a owl:Ontology ;
           owl:imports <http://hathitrust.org/htrc/workset/0.2> ;
@@ -23,12 +23,12 @@ INSERT {
 
         <http://eeboo.oerc.ox.ac.uk/eeboo/worksets/workset_2>
           a owl:NamedIndividual, <http://hathitrust.org/htrc/workset#Workset> ;
-          dc:modified "2015"^^xsd:date ;
+          dc:modified "2015-03-25"^^xsd:date ;
           dc:title "All works published in Oxford"^^xsd:string ;
           dc:creator <http://eeboo.oerc.ox.ac.uk/eeboo/testuser> ;
-          dc:abstract "All the works that have been published in Oxford at any time within the temporal constraints of the datasets"^^xsd:string ;
+          dc:abstract "All works published in Oxford at any time within the temporal constraints of the data sets"^^xsd:string ;
           a prov:Collection ;
-          prov:wasGeneratedBy (eeProv:InputCollection "2015"^^xsd:date) ;
+          prov:wasGeneratedBy (eeProv:InputCollection "2015-03-25"^^xsd:date) ;
           ht:gathers ?ht_work, ?eeboo_work .
     }
 }

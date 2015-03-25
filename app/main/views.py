@@ -37,14 +37,13 @@ def select_worksets(specific_workset = ""):
         if result["workset"]["value"] not in worksets:
             worksets[result["workset"]["value"]] = {
                 "uri": result["workset"]["value"],
-                "urilocal": result["workset"]["value"].replace("http://eeboo.oerc.ox.ac.uk/", "http://127.0.0.1:5000/"),
                 "mod_date": result["mod_date"]["value"],
                 "title": result["title"]["value"],
                 "abstract": result["abstract"]["value"],
                 "user": result["username"]["value"],
                 "works": list()
             }
-        if (result["saltset"]["value"] == "http://127.0.0.1:8890/saltsets/htrc-wcsa_works"): 
+        if (result["saltset"]["value"] == "http://eeboo.oerc.ox.ac.uk/saltsets/htrc-wcsa_works"): 
             saltset = "htrc-wcsa_works"
         else:
             saltset = "eeboo_works"
