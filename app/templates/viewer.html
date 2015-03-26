@@ -4,7 +4,14 @@
         <title> Elephant Workset Viewer </title>
     </head>
     <body>
-        <div class = "ui-head">Elephant Workset Viewer</div>
+        <div class = "ui-head">
+		Elephant Workset Viewer 
+		<select name="userselect" id="userselect">
+		    <option>Demo user</option>
+		    <option>Test user</option>
+		</select>
+	</div>
+
         <div class = "collection">
             {% for workset in worksets %}
             <div class = "item">

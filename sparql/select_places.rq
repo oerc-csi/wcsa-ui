@@ -1,7 +1,7 @@
-PREFIX saltset: <http://127.0.0.1:8890/saltsets/>
-PREFIX salt: <http://127.0.0.1:8890/salt/>
+PREFIX saltset: <http://eeboo.oerc.ox.ac.uk/saltsets/>
+PREFIX salt: <http://eeboo.oerc.ox.ac.uk/salt/>
 PREFIX eeboo: <http://eeboo.oerc.ox.ac.uk/>
-PREFIX : <http://127.0.0.1:8890/>
+PREFIX : <http://eeboo.oerc.ox.ac.uk/>
 
 select distinct ?place { 
   { 

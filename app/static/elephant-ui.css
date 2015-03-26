@@ -6,6 +6,12 @@ body {
     margin-bottom: 15px;
 }
 
+.ui-head select{ 
+    font-size: .6em;
+    float:right;
+    margin-right:40px;
+}
+
 .collection .item { 
     border:1px solid black;
     border-radius:10px;
