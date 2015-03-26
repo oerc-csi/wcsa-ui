@@ -25,12 +25,16 @@
                     {% for work in worksets[workset]["works"] %} 
                     <div class="work {{ work["saltset"]|safe }}"> 
                         <div class="title" title="{{ work["uri"]|safe }}">
-                            <span class="itemheader">Title:</span> {{ work["worktitle"]|safe }}
+                            <span class="itemheader">
+				Title:</span> {{ work["worktitle"]|safe }}
+				{% if work["saltset"] == "eeboo_works" %}
+                                <a href="{{ work["uri"] }}" title="{{ work["uri"] }}" target="_blank" class="bubble eebo">EEBO</a> 
+				{% endif %}
                         </div>
                         <div class="author" title="{{ work["creator"]|safe }}">
                             <span class="itemheader">Author:</span> {{ work["author"]|safe }} 
                             {% if work["saltset"] == "eeboo_works" %}
-                                <a href="{{ work["uri"] }}" title="{{ work["uri"] }}" target="_blank" class="bubble eebo">EEBO</a> 
+                                <a href="{{ work["creator"] }}" title="{{ work["creator"] }}" target="_blank" class="bubble eebo">EEBO</a> 
                             {% else %}
                                 <a href="{{ work["uri"] }}" title="{{ work["uri"] }}" target="_blank" class="bubble ht">&nbsp;HT&nbsp;</a> 
                             {% endif %}
