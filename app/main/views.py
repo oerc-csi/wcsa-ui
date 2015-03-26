@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, current_app
+from flask import render_template, request, redirect, url_for, current_app
 from flask.ext.socketio import SocketIO, emit
 from pprint import pprint
 from SPARQLWrapper import SPARQLWrapper, JSON
@@ -18,15 +18,17 @@ def all_worksets():
     worksets = select_worksets()
     return render_template("viewer.html", worksets = worksets)
 
-@main.route('/eeboo/worksets/<workset>', methods=['GET', 'POST'])
-def detail_workset(workset):
-    ws = "BIND(<{0}> as ?workset) .".format("http://eeboo.oerc.ox.ac.uk/eeboo/worksets/" + workset)
+@main.route('/view_workset', methods=['GET'])
+def detail_workset():
+    workseturi = request.args.get('uri', '')
+    ws = "BIND(<{0}> as ?workset) .".format(workseturi)
     workset = select_worksets(ws)
     return render_template("workset.html", worksets=workset)
 
 def select_worksets(specific_workset = ""):
     app = current_app._get_current_object()
-    sparql = SPARQLWrapper(app.config["ENDPOINT"])
+    sparql = SPARQLWrapper(endpoint = app.config["ENDPOINT"]) 
+    sparql.setCredentials(user = app.config["SPARQLUSER"], passwd = app.config["SPARQLPASSWORD"])
     selectWorksetsQuery = open(app.config["ELEPHANT_QUERY_DIR"] + "select_worksets.rq").read()
     query = selectWorksetsQuery.format(specific_workset)
     sparql.setQuery(query)
@@ -72,6 +74,7 @@ def select_worksets(specific_workset = ""):
 def construct_workset():
     app = current_app._get_current_object()
     sparql = SPARQLWrapper(app.config["ENDPOINT"])
+    sparql.setCredentials(user = app.config["SPARQLUSER"], passwd = app.config["SPARQLPASSWORD"])
     # Get a list of all eeboo persons plus all HTRC persons who are NOT aligned to eeboo persons
     selectPersonsQuery = open(app.config["ELEPHANT_QUERY_DIR"] + "select_persons.rq").read()
     sparql.setQuery(selectPersonsQuery)

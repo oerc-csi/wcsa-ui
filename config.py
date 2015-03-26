@@ -12,6 +12,8 @@ class Config:
 class DevelopmentConfig(Config): 
     DEBUG = True
     BASE_URI = "http://eeboo.oerc.ox.ac.uk"
+    SPARQLUSER = "elephant"
+    SPARQLPASSWORD = "cNLcH9vuyGJmiCR3e1xf"
     ENDPOINT = "http://127.0.0.1:8890/sparql"
     ELEPHANT_QUERY_DIR = os.environ.get("ELEPHANT_QUERY_DIR") or os.environ.get("HOME") + "/EEBOO/elephant-ui/sparql/"
     USER = "testuser"

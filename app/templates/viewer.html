@@ -21,7 +21,7 @@
                     <span class="bubble wcsa">WCSA</span>
                 </div>
                 <ul class="workset-metadata">
-                    <li> <a href="{{ worksets[workset]["uri"]|safe }}" title="Click to open detailed workset view">
+                    <li> <a href="/view_workset?uri={{ worksets[workset]["uri"]|urlencode }}" title="Click to open detailed workset view">
                         Open in workset viewer </a></li>
                     <li> Abstract: {{ worksets[workset]["abstract"]|safe }}</li>
                     <li> User: {{ worksets[workset]["user"]|safe }}</li>
