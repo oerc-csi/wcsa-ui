@@ -25,8 +25,8 @@ def client_connection_event(message):
 
 @socketio.on('constructWorksetRequest')
 def create_workset_request(message): 
-    print handlers['createWorkset'](message, "construct")
-    emit('constructWorksetHandled', message)
+    workseturi = handlers['createWorkset'](message, "construct")
+    emit('constructWorksetHandled', workseturi)
 
 if __name__ == '__main__':
     manager.run()

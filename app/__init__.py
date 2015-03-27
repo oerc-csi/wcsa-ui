@@ -3,7 +3,8 @@ from config import config
 from flask.ext.socketio import SocketIO
 from SPARQLWrapper import SPARQLWrapper, JSON
 from pprint import pprint
-
+from datetime import datetime
+from uuid import uuid4
 
 def create_app(config_name):
     app = Flask(__name__)
@@ -113,10 +114,10 @@ def createWorkset(params, constructInsert):
                 # sparql doesn't like hyphens in variable names...
                 querydates.replace("?precisefloruit-start", "?precisefloruitstart").replace("?approxfloruit-start", "?approxfloruitstart").replace("?floruit-start", "?floruitstart").replace("?floruit-end", "?floruitend")
 
-
-    THEQUERY =  createWorksetQuery.format(workseturi = "eeboo:TESTWORKSETURI", created = "SOMETIME", modified = "SOMEOTHERTIME", title = title, abstract = abstract, useruri = "testuser", authors = querypersons, places = queryplaces, subjects = querysubjects, genres = querygenres, dates = querydates);
-    print THEQUERY
-    return THEQUERY
+    workseturi = "<http://eeboo.oerc.ox.ac.uk/worksets/workset_" + str(uuid4()).replace("-", "") + ">"
+    createWorksetQuery =  createWorksetQuery.format(workseturi = workseturi, created = '"' + datetime.now().isoformat() + '"^^xsd:date', modified =  '"' + datetime.now().isoformat() + '"^^xsd:date', title = '"'+title+'"', abstract = '"'+abstract+'"', useruri = '"testuser"', authors = querypersons, places = queryplaces, subjects = querysubjects, genres = querygenres, dates = querydates);
+    print createWorksetQuery 
+    return workseturi 
 
 def get_websocket_handlers() : 
     return { 
