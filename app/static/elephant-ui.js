@@ -333,7 +333,7 @@ function packQuery() {
             )
         });
         console.log("Trying to request workset construction");
-        socket.emit('constructWorksetRequest', {"persons": person_params, "places": place_params, "genres": genre_params, "subjects":subject_params, "dates":date_params, "title":title, "abstract":description});
+        socket.emit('createWorksetRequest', {"persons": person_params, "places": place_params, "genres": genre_params, "subjects":subject_params, "dates":date_params, "title":title, "abstract":description});
         console.log("done.");
     }
 }
@@ -347,8 +347,12 @@ $(document).ready(function() {
         console.log("Connected to server at http://" + document.domain + ':' + location.port);
     });
 
-    socket.on('constructWorksetHandled', function(msg) { 
-        console.log("constructWorksetHandled: ", msg);
+    socket.on('createWorksetHandled', function(msg) { 
+        console.log("createWorksetHandled: ", msg);
+    });
+    
+    socket.on('createWorksetFailed', function() { 
+        console.log("createWorksetFailed :( ");
     });
 
     $("#person").val("");

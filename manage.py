@@ -23,10 +23,14 @@ def runserver():
 def client_connection_event(message):
     print message
 
-@socketio.on('constructWorksetRequest')
+@socketio.on('createWorksetRequest')
 def create_workset_request(message): 
-    workseturi = handlers['createWorkset'](message, "construct")
-    emit('constructWorksetHandled', workseturi)
+    workseturi = handlers['createWorkset'](message, "insert")
+    if workseturi:
+	print "Created workset: ", workseturi
+	emit('createWorksetHandled', workseturi)
+    else:
+	emit('createWorksetFailed')
 
 if __name__ == '__main__':
     manager.run()

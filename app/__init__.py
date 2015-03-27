@@ -1,7 +1,8 @@
+import sys
 from flask import Flask, current_app
 from config import config
 from flask.ext.socketio import SocketIO
-from SPARQLWrapper import SPARQLWrapper, JSON
+from SPARQLWrapper import SPARQLWrapper, JSON, POST
 from pprint import pprint
 from datetime import datetime
 from uuid import uuid4
@@ -20,9 +21,11 @@ def create_socketio(app):
     return SocketIO(app)
 
 # websocket handlers:
-def createWorkset(params, constructInsert):
+def createWorkset(params, constructInsert = "construct"):
     app = current_app._get_current_object()
-    sparql = SPARQLWrapper(endpoint = app.config["ENDPOINT"])
+    sparql = SPARQLWrapper(endpoint = app.config["ENDPOINT"]) 
+    sparql.setMethod(POST) 
+    sparql.setReturnFormat(JSON)
     createWorksetQuery = open(app.config["ELEPHANT_QUERY_DIR"] + "create_workset_full.rq").read()
     # initialize parameters to be slotted into query
     querypersons    = ""
@@ -115,8 +118,10 @@ def createWorkset(params, constructInsert):
                 querydates.replace("?precisefloruit-start", "?precisefloruitstart").replace("?approxfloruit-start", "?approxfloruitstart").replace("?floruit-start", "?floruitstart").replace("?floruit-end", "?floruitend")
 
     workseturi = "<http://eeboo.oerc.ox.ac.uk/worksets/workset_" + str(uuid4()).replace("-", "") + ">"
-    createWorksetQuery =  createWorksetQuery.format(workseturi = workseturi, created = '"' + datetime.now().isoformat() + '"^^xsd:date', modified =  '"' + datetime.now().isoformat() + '"^^xsd:date', title = '"'+title+'"', abstract = '"'+abstract+'"', useruri = '"testuser"', authors = querypersons, places = queryplaces, subjects = querysubjects, genres = querygenres, dates = querydates);
-    print createWorksetQuery 
+    createWorksetQuery =  createWorksetQuery.format(constructInsert = constructInsert, workseturi = workseturi, created = '"' + datetime.now().isoformat() + '"^^xsd:date', modified =  '"' + datetime.now().isoformat() + '"^^xsd:date', title = '"'+title+'"', abstract = '"'+abstract+'"', user = '"testuser"', authors = querypersons, places = queryplaces, subjects = querysubjects, genres = querygenres, dates = querydates)
+    sparql.setQuery(createWorksetQuery)
+    results = sparql.query().convert()
+    print results
     return workseturi 
 
 def get_websocket_handlers() : 

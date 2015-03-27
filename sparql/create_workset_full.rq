@@ -12,7 +12,7 @@ PREFIX salt: <http://eeboo.oerc.ox.ac.uk/salt/>
 PREFIX saltset: <http://eeboo.oerc.ox.ac.uk/saltsets/>
 PREFIX : <http://eeboo.oerc.ox.ac.uk/>
 
-CONSTRUCT
+{constructInsert}
 {{
     GRAPH :worksets {{ 
        {workseturi}
@@ -21,7 +21,7 @@ CONSTRUCT
            dc:created {created} ;
            dc:modified {modified} ;
            dc:title {title} ;
-           dc:creator {useruri} ;
+           dc:creator {user} ;
            a ro:ResearchObject ;
            a ore:Aggregation ;
            ore:aggregates ?eeboo_work,?ht_work; #,<annotation.uri> ;
@@ -34,6 +34,8 @@ CONSTRUCT
          ?ht_work a ore:AggregatedResource;
           a owl:NamedIndividual, ht:Volume .
         
+#      ?user a owl:NamedIndividual, dc:Agent ;
+#	      dc:identifier {user}^^xsd:string .
 #         <annotation.uri> a ro:Annotation ; 
 #            ao:body  <file.rq> ; #this could also be a srtring, or e.g. a .ttl file, according to http://wf4ever.github.io/ro-primer/#prov-ro
 #            dc:creator  <user.uri> ;
