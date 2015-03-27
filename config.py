@@ -11,7 +11,7 @@ class Config:
 
 class DevelopmentConfig(Config): 
     DEBUG = True
-    BASE_URI = "http://eeboo.oerc.ox.ac.uk"
+    BASE_URI = "http://127.0.0.1:8890"
     SPARQLUSER = "elephant"
     SPARQLPASSWORD = "cNLcH9vuyGJmiCR3e1xf"
     ENDPOINT = "http://127.0.0.1:8890/sparql"

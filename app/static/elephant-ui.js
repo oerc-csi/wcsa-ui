@@ -1,3 +1,8 @@
+// websocket variable (initialized in $(document).ready) 
+
+var socket;
+
+
 function personInput(thisItem) { 
     var val = $(thisItem).val();
     previewHtml = "";
@@ -183,7 +188,7 @@ function includePersons(element, selector) {
     $(selector).each(function() { 
         if(alreadyIncluded.indexOf($(this).attr("title")) < 0) { 
             // only if not already included
-            includedPersons += '<div title="' + $(this).attr("title") + '" onclick="removeFromQuery(this)"> Works by: ' + $(this).children("span").html() + '</div>\n';
+            includedPersons += '<div title="' + $(this).attr("title") + '" onclick="removeFromQuery(this)"> Works by: <span>' + $(this).children("span").html() + '</span></div>\n';
         }
     });
     $("#personsInQuery").html(includedPersons);
@@ -213,7 +218,7 @@ function includePlaces(element, selector) {
     $(selector).each(function() { 
         if(alreadyIncluded.indexOf($(this).attr("title")) < 0) { 
             // only if not already included
-            includedPlaces += '<div title="' + $(this).children("span").html() + '" onclick="removeFromQuery(this)"> Publication place: ' + $(this).children("span").html() + '</div>\n';
+            includedPlaces += '<div title="' + $(this).children("span").html() + '" onclick="removeFromQuery(this)"> Publication place: <span>' + $(this).children("span").html() + '</span></div>\n';
         }
     });
     if(includedPlaces !== " ") { 
@@ -243,7 +248,7 @@ function includeSubjects(element, selector) {
     $(selector).each(function() { 
         if(alreadyIncluded.indexOf($(this).attr("title")) < 0) { 
             // only if not already included
-            includedSubjects += '<div title="' + $(this).children("span").html() + '" onclick="removeFromQuery(this)"> Publication subject: ' + $(this).children("span").html() + '</div>\n';
+            includedSubjects += '<div title="' + $(this).children("span").html() + '" onclick="removeFromQuery(this)"> Publication subject: <span>' + $(this).children("span").html() + '</span></div>\n';
         }
     });
     if(includedSubjects !== " ") { 
@@ -273,7 +278,7 @@ function includeGenres(element, selector) {
     $(selector).each(function() { 
         if(alreadyIncluded.indexOf($(this).attr("title")) < 0) { 
             // only if not already included
-            includedGenres += '<div title="' + $(this).children("span").html() + '" onclick="removeFromQuery(this)"> Publication genre: ' + $(this).children("span").html() + '</div>\n';
+            includedGenres += '<div title="' + $(this).children("span").html() + '" onclick="removeFromQuery(this)"> Publication genre: <span>' + $(this).children("span").html() + '</span></div>\n';
         }
     });
     if(includedGenres !== " ") { 
@@ -284,7 +289,7 @@ function includeGenres(element, selector) {
 }
 
 function removeFromQuery(element) { 
-    if(confirm("Removing from workset\n" + $(element).html() + "\nAre you sure?")) { 
+    if(confirm("Removing from workset\n" + $(element).children("span").html() + "\nAre you sure?")) { 
         if($(element).siblings("div").size() == 0) { 
             // removed the last item of this type
             // so hide the header
@@ -294,8 +299,58 @@ function removeFromQuery(element) {
     }
 }
 
+function packQuery() { 
+    // construct our query parameters based on user's activities in the constructor
+    var person_params = [];
+    var place_params = [];
+    var subject_params = [];
+    var genre_params = [];
+    var date_params = {};
+    var title = $("#workset-title").val().replace('"', "'");
+    var description = $("#workset-abstract").val().replace('"', "'");
+    if($("#personsInQuery").html()) {
+        $("#personsInQuery").children("div").each(function() { 
+            person_params.push($(this).attr("title"));
+        });
+        $("#placesInQuery").children("div").each(function() { 
+            place_params.push($(this).attr("title"));
+        });
+        $("#subjectsInQuery").children("div").each(function() { 
+            subject_params.push($(this).attr("title"));
+        });
+        $("#genresInQuery").children("div").each(function() { 
+            genre_params.push($(this).attr("title"));
+        });
+        $("#datesInQuery").children("div").each(function() { 
+            if(typeof date_params[$(this).attr("data-datetype")] === "undefined") {
+                date_params[$(this).attr("data-datetype")] = [];
+            }
+            date_params[$(this).attr("data-datetype")].push(
+                {
+                    "date": $(this).attr("data-date"),
+                    "daterelation": $(this).attr("data-daterelation")
+                }
+            )
+        });
+        console.log("Trying to request workset construction");
+        socket.emit('constructWorksetRequest', {"persons": person_params, "places": place_params, "genres": genre_params, "subjects":subject_params, "dates":date_params, "title":title, "abstract":description});
+        console.log("done.");
+    }
+}
 
 $(document).ready(function() { 
+    // set up websocket
+    console.log("Trying to connect...");
+    socket=io.connect('http://' + document.domain + ':' +  location.port);
+    socket.on('connect', function() { 
+        socket.emit('clientConnectionEvent', 'Client connected.');
+        console.log("Connected to server at http://" + document.domain + ':' + location.port);
+    });
+
+    socket.on('constructWorksetHandled', function(msg) { 
+        console.log("constructWorksetHandled: ", msg);
+    });
+
     $("#person").val("");
     $("#place").val("");
     $("#subject").val("");

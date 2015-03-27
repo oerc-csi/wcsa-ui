@@ -80,8 +80,8 @@
                         <option value="workpub" selected="selected">Work published</option>
                         <option value="birth">Author born</option>
                         <option value="death">Author died</option>
-                        <option value="fl-from">Author fl. from</option>
-                        <option value="fl-to">Author fl. until</option>
+                        <option value="floruit-start">Author fl. from</option>
+                        <option value="floruit-end">Author fl. until</option>
                     </select>
                     <select name="daterelation" id="daterelation">
                         <option value="&equals;" selected="selected">during</option>
@@ -107,7 +107,7 @@
            <textarea id="workset-abstract" name="workset-abstract"></textarea>
        </div>
 
-        <span class="button">Create workset</span>
+        <span class="button" onclick="packQuery()">Create workset</span>
         <span class="button back"><a href="/">Back to viewer</a></span>
         <script>
             {# build a JSON object that contains all EEBOO Persons, so that we can access them from the query interface #}

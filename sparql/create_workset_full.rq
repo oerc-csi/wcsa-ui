@@ -1,0 +1,66 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix owl: <http://www.w3.org/2002/07/owl#> 
+prefix dc: <http://purl.org/dc/terms/> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#> 
+prefix ht: <http://hathitrust.org/htrc/workset#> 
+prefix prov: <http://www.w3.org/ns/prov#> 
+prefix ore: <http://www.openarchives.org/ore/terms/> 
+prefix ro: <http://purl.org/wf4ever/ro#> 
+prefix ao: <http://purl.org/ontology/ao/core#> 
+prefix eeboo: <http://eeboo.oerc.ox.ac.uk/eeboo/>
+PREFIX salt: <http://eeboo.oerc.ox.ac.uk/salt/>
+PREFIX saltset: <http://eeboo.oerc.ox.ac.uk/saltsets/>
+PREFIX : <http://eeboo.oerc.ox.ac.uk/>
+
+CONSTRUCT
+{{
+    GRAPH :worksets {{ 
+       {workseturi}
+           a owl:NamedIndividual ;
+           a ht:Workset ;
+           dc:created {created} ;
+           dc:modified {modified} ;
+           dc:title {title} ;
+           dc:creator {useruri} ;
+           a ro:ResearchObject ;
+           a ore:Aggregation ;
+           ore:aggregates ?eeboo_work,?ht_work; #,<annotation.uri> ;
+           ht:gathers ?eeboo_work, ?ht_work;
+           dc:abstract {abstract} .
+
+        ?eeboo_work a ore:AggregatedResource;
+          a owl:NamedIndividual, ht:Volume .
+        
+         ?ht_work a ore:AggregatedResource;
+          a owl:NamedIndividual, ht:Volume .
+        
+#         <annotation.uri> a ro:Annotation ; 
+#            ao:body  <file.rq> ; #this could also be a srtring, or e.g. a .ttl file, according to http://wf4ever.github.io/ro-primer/#prov-ro
+#            dc:creator  <user.uri> ;
+#		    dc:created "2015-03-20T12:26:53+00:00"^^xsd:date;
+#		    dc:modified "2015-03-22T11:23:52+00:00"^^xsd:date .
+    }}
+ }}
+WHERE {{
+    ?eeboo_author salt:in_salt_set saltset:eeboo_creators ;
+        :matchParticipant ?match .
+    {authors}
+    ?ht_author salt:in_salt_set saltset:htrc-wcsa_creators ;
+        :matchParticipant ?match .
+    ?eeboo_work eeboo:creator ?eeboo_author ;
+            <http://www.loc.gov/mods/rdf/v1#titlePrincipal> ?eeboo_title_bnode.
+    ?eeboo_title_bnode rdfs:label ?eeboo_title.
+    ?ht_work dc:creator ?ht_author ;
+             rdfs:label ?ht_title .
+    {places}
+    {subjects}
+    {genres}              
+    {dates}
+
+    # filter out consistently occurring data errors
+    FILTER(?ht_title != "ESTC" && ?ht_title != "ESTC (RLIN)," && ?ht_title != "Wing (2nd ed.)" && ?ht_title != "Wing (2nd ed.)," && ?ht_title != "Wing (2nd ed., 1994)") . 
+
+}}
+
+
+

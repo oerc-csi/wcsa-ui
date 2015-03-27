@@ -1,6 +1,6 @@
-PREFIX saltset: <http://eeboo.oerc.ox.ac.uk/saltsets/>
-PREFIX salt: <http://eeboo.oerc.ox.ac.uk/salt/>
-PREFIX : <http://eeboo.oerc.ox.ac.uk/>
+PREFIX saltset: <http://127.0.0.1/saltsets/>
+PREFIX salt: <http://127.0.0.1/salt/>
+PREFIX : <http://127.0.0.1/>
 
 select distinct ?uri ?label { 
   { 

@@ -1,0 +1,35 @@
+prefix owl: <http://www.w3.org/2002/07/owl#>
+prefix dc: <http://purl.org/dc/terms/>
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix ht: <http://hathitrust.org/htrc/workset#>
+prefix prov: <http://www.w3.org/ns/prov#>
+prefix eeProv: <http://eeboo.oerc.ox.ac.uk/eeProv/>
+prefix eeboo: <http://eeboo.oerc.ox.ac.uk/eeboo/>
+PREFIX salt: <http://eeboo.oerc.ox.ac.uk/salt/>
+PREFIX saltset: <http://eeboo.oerc.ox.ac.uk/saltsets/>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX mods: <http://www.loc.gov/mods/rdf/v1#>
+PREFIX : <http://eeboo.oerc.ox.ac.uk/>
+
+SELECT distinct ?eeboo_author ?eeboo_title ?ht_author ?ht_title WHERE {{
+    ?eeboo_author salt:in_salt_set saltset:eeboo_creators ;
+        :matchParticipant ?match .
+    {authors}
+    ?ht_author salt:in_salt_set saltset:htrc-wcsa_creators ;
+        :matchParticipant ?match .
+    ?eeboo_work eeboo:creator ?eeboo_author ;
+            <http://www.loc.gov/mods/rdf/v1#titlePrincipal> ?eeboo_title_bnode.
+    ?eeboo_title_bnode rdfs:label ?eeboo_title.
+    ?ht_work dc:creator ?ht_author ;
+             rdfs:label ?ht_title .
+    {places}
+    {subjects}
+    {genres}              
+    {dates}
+
+    # filter out consistently occurring data errors
+    FILTER(?ht_title != "ESTC" && ?ht_title != "ESTC (RLIN)," && ?ht_title != "Wing (2nd ed.)" && ?ht_title != "Wing (2nd ed.)," && ?ht_title != "Wing (2nd ed., 1994)") . 
+
+}}
+
+    
