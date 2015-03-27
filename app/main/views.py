@@ -1,5 +1,4 @@
 from flask import render_template, request, redirect, url_for, current_app
-from flask.ext.socketio import SocketIO, emit
 from pprint import pprint
 from SPARQLWrapper import SPARQLWrapper, JSON
 from rdflib import Graph, plugin, URIRef, Literal
@@ -9,6 +8,7 @@ import json
 import re
 
 from . import main
+
 
 @main.route('/index.html', methods=['GET', 'POST'])
 @main.route('/viewer.html', methods=['GET', 'POST'])
@@ -105,6 +105,7 @@ def construct_workset():
     for p in genreResults["results"]["bindings"]:
         genres.append(p["genre"]["value"])
     return render_template("construct.html", persons = persons, places = places, subjects = subjects, genres = genres)
+
 
 
 
