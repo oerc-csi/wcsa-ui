@@ -2,6 +2,8 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 prefix owl: <http://www.w3.org/2002/07/owl#> 
 prefix dc: <http://purl.org/dc/elements/1.1/>
 prefix xsd: <http://www.w3.org/2001/XMLSchema#> 
+prefix mods: <http://www.loc.gov/mods/rdf/v1#>
+prefix mads: <http://www.loc.gov/mads/rdf/v1#>
 prefix ht: <http://hathitrust.org/htrc/workset#> 
 prefix prov: <http://www.w3.org/ns/prov#> 
 prefix ore: <http://www.openarchives.org/ore/terms/> 

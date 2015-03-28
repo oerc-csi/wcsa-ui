@@ -40,7 +40,7 @@ def createWorkset(params, constructInsert = "construct"):
     if params["persons"]: 
         querypersons = "\tVALUES ?eeboo_author { \n"
         for p in params["persons"]:
-            querypersons += "\t<" + p + ">\n"
+            querypersons += "\t<" + p.encode('utf-8') + ">\n"
         querypersons += "}\n"
     
     if params["places"]:
@@ -50,12 +50,12 @@ def createWorkset(params, constructInsert = "construct"):
         ?ht_place_node rdfs:label ?ht_place .
         VALUES ?eeboo_place {\n"""
         for p in params["places"]:
-            queryplaces += '\t\t "' + p + '"^^<http://www.w3.org/2001/XMLSchema#string>\n'
+            queryplaces += '\t\t "' + p.encode('utf-8') + '"^^<http://www.w3.org/2001/XMLSchema#string>\n'
         queryplaces += """
         \t\t}
         VALUES ?ht_place {\n"""
         for p in params["places"]:
-            queryplaces += '\t "' + p + '"\n'
+            queryplaces += '\t "' + p.encode('utf-8') + '"\n'
         queryplaces += "\t}\n"
 
     if params["subjects"]:
@@ -64,7 +64,7 @@ def createWorkset(params, constructInsert = "construct"):
         ?subject rdfs:label ?subjectLabel .
         VALUES ?subjectLabel { \n"""
         for p in params["subjects"]:
-            querysubjects += '\t "' + p + '"\n'
+            querysubjects += '\t "' + p.encode('utf-8') + '"\n'
         querysubjects += "\t}\n"
 
     if params["genres"]:
@@ -73,7 +73,7 @@ def createWorkset(params, constructInsert = "construct"):
         ?genre rdfs:label ?genreLabel .
         VALUES ?genreLabel { \n"""
         for p in params["genres"]:
-            querygenres += '\t "' + p + '"\n'
+            querygenres += '\t "' + p.encode('utf-8') + '"\n'
         querygenres += "\t}\n"
     
     if params["dates"]:
@@ -118,7 +118,7 @@ def createWorkset(params, constructInsert = "construct"):
                 querydates.replace("?precisefloruit-start", "?precisefloruitstart").replace("?approxfloruit-start", "?approxfloruitstart").replace("?floruit-start", "?floruitstart").replace("?floruit-end", "?floruitend")
 
     workseturi = "<http://eeboo.oerc.ox.ac.uk/worksets/workset_" + str(uuid4()).replace("-", "") + ">"
-    createWorksetQuery =  createWorksetQuery.format(constructInsert = constructInsert, workseturi = workseturi, created = '"' + datetime.now().isoformat() + '"^^xsd:date', modified =  '"' + datetime.now().isoformat() + '"^^xsd:date', title = '"'+title+'"', abstract = '"'+abstract+'"', user = '"testuser"', authors = querypersons, places = queryplaces, subjects = querysubjects, genres = querygenres, dates = querydates)
+    createWorksetQuery =  createWorksetQuery.format(constructInsert = constructInsert, workseturi = workseturi, created = '"' + datetime.now().isoformat() + '"^^xsd:date', modified =  '"' + datetime.now().isoformat() + '"^^xsd:date', title = '"'+title.encode('utf-8')+'"', abstract = '"'+abstract.encode('utf-8')+'"', user = '"Test user"', authors = querypersons, places = queryplaces, subjects = querysubjects, genres = querygenres, dates = querydates)
     sparql.setQuery(createWorksetQuery)
     results = sparql.query().convert()
     print results

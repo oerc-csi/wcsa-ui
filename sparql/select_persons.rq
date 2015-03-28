@@ -10,14 +10,14 @@ select distinct ?uri ?label {
      ?other salt:in_salt_set saltset:htrc-wcsa_creators ;
         :matchParticipant ?match .
   }
-  UNION {
-     ?uri salt:in_salt_set saltset:htrc-wcsa_creators;
-        rdfs:label ?label .
-     MINUS {
-          ?uri :matchParticipant ?match .
-          ?foo :matchParticipant ?match ;
-               salt:in_salt_set saltset:eeboo_creators .
-     } .
-  }
+#  UNION {
+#     ?uri salt:in_salt_set saltset:htrc-wcsa_creators;
+#        rdfs:label ?label .
+#     MINUS {
+#          ?uri :matchParticipant ?match .
+#          ?foo :matchParticipant ?match ;
+#               salt:in_salt_set saltset:eeboo_creators .
+#     } .
+#  }
 }
 

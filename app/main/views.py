@@ -49,22 +49,25 @@ def select_worksets(specific_workset = ""):
             saltset = "htrc-wcsa_works"
         else:
             saltset = "eeboo_works"
-        worksets[result["workset"]["value"]]["works"].append(
-            {
-                "uri": result["work"]["value"], 
-                "worktitle": result["worktitle"]["value"], 
-                "author": result["author"]["value"],
-                "creator": result["creator"]["value"],
-                "pubdate": result["pubdate"]["value"],
-                "datePrecision": result["datePrecision"]["value"],
-                "place": result["place"]["value"],
+	try:
+  	    worksets[result["workset"]["value"]]["works"].append(
+	    {
+		"uri": result["work"]["value"], 
+		"worktitle": result["worktitle"]["value"],
+		"author": result["author"]["value"],
+		"creator": result["creator"]["value"],
+		"pubdate": result["pubdate"]["value"],
+		"datePrecision": result["datePrecision"]["value"],
+		"place": result["place"]["value"],
 #                "imprint": result["imprint"]["value"],
-                "elecLoc": result["elecLoc"]["value"],
-                "viaf": result["viaf"]["value"],
-                "loc": result["loc"]["value"],
-                "saltset":saltset
-            }) 
-    
+		"elecLoc": result["elecLoc"]["value"],
+		"viaf": result["viaf"]["value"],
+		"loc": result["loc"]["value"],
+		"saltset":saltset
+	    })
+	except:
+	    # FIXME unicode issue 
+	    pass
     for workset in worksets:
         worksets[workset]["works"] = sorted(worksets[workset]["works"], key=lambda k: (k["author"], k["worktitle"]))
     return worksets
