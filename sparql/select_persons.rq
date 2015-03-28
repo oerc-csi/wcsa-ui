@@ -2,18 +2,22 @@ PREFIX saltset: <http://eeboo.oerc.ox.ac.uk/saltsets/>
 PREFIX salt: <http://eeboo.oerc.ox.ac.uk/salt/>
 PREFIX : <http://eeboo.oerc.ox.ac.uk/>
 
-select distinct ?uri ?label { 
-  { 
-     ?uri salt:in_salt_set saltset:eeboo_creators ; 
+select distinct ?uri ?label {
+  {
+     ?uri salt:in_salt_set saltset:eeboo_creators ;
+        :matchParticipant ?match ;
         rdfs:label ?label .
+     ?other salt:in_salt_set saltset:htrc-wcsa_creators ;
+        :matchParticipant ?match .
   }
-  UNION { 
+  UNION {
      ?uri salt:in_salt_set saltset:htrc-wcsa_creators;
         rdfs:label ?label .
      MINUS {
           ?uri :matchParticipant ?match .
-          ?foo :matchParticipant ?match ; 
-               salt:in_salt_set saltset:eeboo_creators . 
+          ?foo :matchParticipant ?match ;
+               salt:in_salt_set saltset:eeboo_creators .
      } .
   }
 }
+
