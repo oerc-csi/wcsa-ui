@@ -33,7 +33,10 @@ def select_worksets(specific_workset = "", specific_user = ""):
     query = selectWorksetsQuery.format(specific_workset, specific_user)
     sparql.setQuery(query)
     sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
+    try: 
+       results = sparql.query().convert()
+    except: 
+       return {};
     worksets = dict()
     for result in results["results"]["bindings"]:
         if result["workset"]["value"] not in worksets:

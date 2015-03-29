@@ -50,8 +50,12 @@ body {
 
 .button#createWorkset.disabled { 
     cursor:default;
-    pointer-events:default;
     border:none;
+    pointer-events:none;
+}
+
+.button#createWorkset.disabled a { 
+    pointer-events:none;
 }
 
 .workset-metadata { 
@@ -291,4 +295,9 @@ a.bubble {
 .workset-metadata-input textarea { 
     height:8em;
     resize:vertical;
+}
+
+.msg {
+    font-size:1.2em;
+    margin-bottom:10px;
 }

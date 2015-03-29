@@ -347,6 +347,8 @@ $(document).ready(function() {
     socket.on('connect', function() { 
         socket.emit('clientConnectionEvent', 'Client connected.');
         console.log("Connected to server at http://" + document.domain + ':' + location.port);
+	$('.button#CreateWorkset').removeClass("disabled").html("Create workset");
+	
     });
 
     socket.on('createWorksetHandled', function(workseturi) { 
