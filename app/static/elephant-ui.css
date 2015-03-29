@@ -48,6 +48,12 @@ body {
     font-size:initial;
 }
 
+.button#createWorkset.disabled { 
+    cursor:default;
+    pointer-events:default;
+    border:none;
+}
+
 .workset-metadata { 
     font-size: 1.2em;
 }

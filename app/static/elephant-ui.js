@@ -334,6 +334,8 @@ function packQuery() {
         });
         console.log("Trying to request workset construction");
         socket.emit('createWorksetRequest', {"persons": person_params, "places": place_params, "genres": genre_params, "subjects":subject_params, "dates":date_params, "title":title, "abstract":description});
+	$(".button#createWorkset").html('<i class="fa fa-cog fa-spin"></i>');
+	$(".button#createWorkset").addClass("disabled");
         console.log("done.");
     }
 }
@@ -347,8 +349,9 @@ $(document).ready(function() {
         console.log("Connected to server at http://" + document.domain + ':' + location.port);
     });
 
-    socket.on('createWorksetHandled', function(msg) { 
-        console.log("createWorksetHandled: ", msg);
+    socket.on('createWorksetHandled', function(workseturi) { 
+        console.log("createWorksetHandled: ", workseturi);
+	window.location.href = "http://eeboo.oerc.ox.ac.uk/view_workset?uri=" + workseturi.replace("<", "").replace(">", "");
     });
     
     socket.on('createWorksetFailed', function() { 

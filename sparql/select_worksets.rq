@@ -6,6 +6,7 @@ PREFIX eeboo: <http://eeboo.oerc.ox.ac.uk/eeboo/>
 SELECT DISTINCT ?workset ?uri ?urilocal ?mod_date ?title ?abstract ?username ?work ?worktitle ?author ?creator ?pubdate ?datePrecision ?place ?imprint ?elecLoc ?viaf ?loc ?saltset 
 WHERE {{
     {0}
+    {1}
     ?workset a ht:Workset ;
        dc:modified ?mod_date ;
        dc:title ?title ;

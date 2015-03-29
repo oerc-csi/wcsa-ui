@@ -15,7 +15,7 @@ from . import main
 @main.route('/viewer', methods=['GET', 'POST'])
 @main.route('/', methods=['GET', 'POST'])
 def all_worksets():
-    worksets = select_worksets()
+    worksets = select_worksets(specific_user = "BIND('Demo user' as ?username)")
     return render_template("viewer.html", worksets = worksets)
 
 @main.route('/view_workset', methods=['GET'])
@@ -25,12 +25,12 @@ def detail_workset():
     workset = select_worksets(ws)
     return render_template("workset.html", worksets=workset)
 
-def select_worksets(specific_workset = ""):
+def select_worksets(specific_workset = "", specific_user = ""):
     app = current_app._get_current_object()
     sparql = SPARQLWrapper(endpoint = app.config["ENDPOINT"]) 
     sparql.setCredentials(user = app.config["SPARQLUSER"], passwd = app.config["SPARQLPASSWORD"])
     selectWorksetsQuery = open(app.config["ELEPHANT_QUERY_DIR"] + "select_worksets.rq").read()
-    query = selectWorksetsQuery.format(specific_workset)
+    query = selectWorksetsQuery.format(specific_workset, specific_user)
     sparql.setQuery(query)
     sparql.setReturnFormat(JSON)
     results = sparql.query().convert()

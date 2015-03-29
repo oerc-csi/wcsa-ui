@@ -15,5 +15,6 @@ select distinct ?place {
         ?placeNode a <http://www.loc.gov/mads/rdf/v1#Geographic>;
                              rdfs:label ?place .
   }
+  FILTER(?place != "enk")
 }
 order by ?place
