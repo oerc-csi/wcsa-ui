@@ -39,7 +39,7 @@ WHERE {{
             BIND("(approx.)" as ?pubDatePrecision) .
         }}
     
-        BIND(COALESCE(STR(YEAR(COALESCE(?precisepub, ?approxpub))), "Unknown") as ?pubdate ).
+        BIND(COALESCE(STR(COALESCE(?precisepub, ?approxpub)), "Unknown") as ?pubdate ).
         BIND(COALESCE(?pubDatePrecision, "") as ?datePrecision) . 
 
      
@@ -50,7 +50,7 @@ WHERE {{
         ?work mods:titlePrincipal ?titlebnode ;
                 mods:placeOfOrigin ?placebnode .
         ?placebnode rdfs:label ?place . 
-        FILTER(?place != "enk") . #TODO what is this?
+        FILTER(?place != "enk" && ?place != "stk") . #TODO what is this?
         ?titlebnode rdfs:label ?worktitle .
         FILTER(?worktitle != "ESTC" && ?worktitle != "Wing (2nd ed.)" && ?worktitle != "Wing (2nd ed., 1994)") . #TODO what are these?
         ?work  dc:creator ?creator ;

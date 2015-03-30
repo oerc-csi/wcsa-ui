@@ -2,6 +2,10 @@
 
 var socket;
 
+function loadWorksetsByUser(userSelect) { 
+    var user = $(userSelect).val();
+    window.location.href = 'http://eeboo.oerc.ox.ac.uk/viewer?user="' + user + '"';
+}
 
 function personInput(thisItem) { 
     var val = $(thisItem).val();

@@ -5,10 +5,10 @@
     </head>
     <body>
         <div class = "ui-head">
-		Elephant Workset Viewer 
-		<select name="userselect" id="userselect">
-		    <option>Demo user</option>
-		    <option>Test user</option>
+		Elephant Workset Viewer
+		<select autocomplete="off" name="userselect" id="userselect" onchange="loadWorksetsByUser(this)">
+		    <option {% if user == '"Demo user"' %} selected="selected" {% endif %} >Demo user</option>
+		    <option {% if user == '"Test user"' %} selected="selected" {% endif %} >Test user</option>
 		</select>
 	</div>
 

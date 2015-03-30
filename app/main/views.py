@@ -15,8 +15,9 @@ from . import main
 @main.route('/viewer', methods=['GET', 'POST'])
 @main.route('/', methods=['GET', 'POST'])
 def all_worksets():
-    worksets = select_worksets(specific_user = "BIND('Demo user' as ?username)")
-    return render_template("viewer.html", worksets = worksets)
+    user = request.args.get('user', '') or '"Demo user"'
+    worksets = select_worksets(specific_user = "BIND({0} as ?username)".format(user))
+    return render_template("viewer.html", worksets = worksets, user = user)
 
 @main.route('/view_workset', methods=['GET'])
 def detail_workset():
@@ -59,7 +60,7 @@ def select_worksets(specific_workset = "", specific_user = ""):
 		"worktitle": result["worktitle"]["value"],
 		"author": result["author"]["value"],
 		"creator": result["creator"]["value"],
-		"pubdate": result["pubdate"]["value"],
+		"pubdate": result["pubdate"]["value"].replace("-01-01",""), #FIXME
 		"datePrecision": result["datePrecision"]["value"],
 		"place": result["place"]["value"],
 #                "imprint": result["imprint"]["value"],
