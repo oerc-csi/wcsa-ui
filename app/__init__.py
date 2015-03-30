@@ -38,7 +38,7 @@ def createWorkset(params, constructInsert = "construct"):
     abstract = params["abstract"].replace('"', "'")
     # set up parameters according to user's selections in constructor UI
     if params["persons"]: 
-        querypersons = "\tVALUES ?eeboo_author { \n"
+        querypersons = "\tVALUES ?author { \n"
         for p in params["persons"]:
             querypersons += "\t<" + p.encode('utf-8') + ">\n"
         querypersons += "}\n"
@@ -120,8 +120,9 @@ def createWorkset(params, constructInsert = "construct"):
     workseturi = "<http://eeboo.oerc.ox.ac.uk/worksets/workset_" + str(uuid4()).replace("-", "") + ">"
     createWorksetQuery =  createWorksetQuery.format(constructInsert = constructInsert, workseturi = workseturi, created = '"' + datetime.now().isoformat() + '"^^xsd:date', modified =  '"' + datetime.now().isoformat() + '"^^xsd:date', title = '"'+title.encode('utf-8')+'"', abstract = '"'+abstract.encode('utf-8')+'"', user = '"Test user"', authors = querypersons, places = queryplaces, subjects = querysubjects, genres = querygenres, dates = querydates)
     sparql.setQuery(createWorksetQuery)
+    with open("elephant.log", "a") as logfile:
+	logfile.write(createWorksetQuery)
     results = sparql.query().convert()
-    print results
     return workseturi 
 
 def get_websocket_handlers() : 

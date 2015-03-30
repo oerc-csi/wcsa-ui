@@ -26,8 +26,8 @@ PREFIX : <http://eeboo.oerc.ox.ac.uk/>
            dc:creator {user} ;
            a ro:ResearchObject ;
            a ore:Aggregation ;
-           ore:aggregates ?eeboo_work,?ht_work; #,<annotation.uri> ;
-           ht:gathers ?eeboo_work, ?ht_work;
+           ore:aggregates ?work ; #,<annotation.uri> ;
+           ht:gathers ?work ;
            dc:abstract {abstract} .
 
         ?eeboo_work a ore:AggregatedResource;
@@ -46,23 +46,35 @@ PREFIX : <http://eeboo.oerc.ox.ac.uk/>
     }}
  }}
 WHERE {{
-    ?eeboo_author salt:in_salt_set saltset:eeboo_creators ;
-        :matchParticipant ?match .
-    {authors}
-    ?ht_author salt:in_salt_set saltset:htrc-wcsa_creators ;
-        :matchParticipant ?match .
-    ?eeboo_work eeboo:creator ?eeboo_author ;
-            <http://www.loc.gov/mods/rdf/v1#titlePrincipal> ?eeboo_title_bnode.
-    ?eeboo_title_bnode rdfs:label ?eeboo_title.
-    ?ht_work dc:creator ?ht_author ;
-             rdfs:label ?ht_title .
+   {authors}
+   {{
+       ?author salt:in_salt_set saltset:eeboo_creators .    
+
+       ?work eeboo:creator ?author ;
+               <http://www.loc.gov/mods/rdf/v1#titlePrincipal> ?eeboo_title_bnode .
+       ?eeboo_title_bnode rdfs:label ?title .
+    }} UNION {{ 
+       ?author salt:in_salt_set saltset:htrc-wcsa_creators .
+       ?work dc:creator ?author ;
+             rdfs:label ?title .
+ 
+    }} UNION {{ 
+       ?author salt:in_salt_set saltset:eeboo_creators ;
+             :matchParticipant ?match .
+        ?ht_author :matchParticipant ?match ;
+            salt:in_salt_set saltset:htrc-wcsa_creators .
+        ?match :matchDecisionStatus "http://eeboo.oerc.ox.ac.uk/matchAlgorithm/confirmedMatch" .
+        ?work dc:creator ?ht_author ; 
+             rdfs:label ?title .
+    }}
+
     {places}
     {subjects}
     {genres}              
     {dates}
 
     # filter out consistently occurring data errors
-    FILTER(?ht_title != "ESTC" && ?ht_title != "ESTC (RLIN)," && ?ht_title != "Wing (2nd ed.)" && ?ht_title != "Wing (2nd ed.)," && ?ht_title != "Wing (2nd ed., 1994)") . 
+    FILTER(?title != "ESTC" && ?title != "ESTC (RLIN)," && ?title != "Wing (2nd ed.)" && ?title != "Wing (2nd ed.)," && ?title != "Wing (2nd ed., 1994)") . 
 
 }}
 
