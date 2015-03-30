@@ -33,67 +33,107 @@ def createWorkset(params, constructInsert = "construct"):
     querysubjects   = ""
     querygenres     = ""
     querydates      = ""
+    genre_ht = ""
+    genre_both = ""
+    subject_ht = ""
+    subject_both = ""
+    subjGenrUnionStart = ""
+    subjGenrUnionEnd = ""
+    if params["genres"] or params["subjects"]:
+	eeboo_only = ""
+	subjGenrUnionStart = "{"
+	subjGenrUnionEnd = """
+	} UNION { 
+	?work eeboo:creator ?author ;
+	<http://www.loc.gov/mods/rdf/v1#titlePrincipal> ?eeboo_title_bnode .
+        ?eeboo_title_bnode rdfs:label ?title .
+	}"""
+    else: 
+	eeboo_only = """
+{
+?author salt:in_salt_set saltset:eeboo_creators .    
 
+?work eeboo:creator ?author ;
+<http://www.loc.gov/mods/rdf/v1#titlePrincipal> ?eeboo_title_bnode .
+?eeboo_title_bnode rdfs:label ?title .
+} UNION """
     title = params["title"].replace('"', "'")
     abstract = params["abstract"].replace('"', "'")
     # set up parameters according to user's selections in constructor UI
     if params["persons"]: 
-        querypersons = "\tVALUES ?author { \n"
+        querypersons = "VALUES ?author { \n"
         for p in params["persons"]:
-            querypersons += "\t<" + p.encode('utf-8') + ">\n"
+            querypersons += "<" + p.encode('utf-8') + ">\n"
         querypersons += "}\n"
     
     if params["places"]:
         queryplaces = """
-        ?eeboo_work eeboo:raw_pubplace ?eeboo_place .
-        ?ht_work mods:placeOfOrigin ?ht_place_node .
-        ?ht_place_node rdfs:label ?ht_place .
-        VALUES ?eeboo_place {\n"""
+{ 
+   ?work eeboo:raw_pubplace ?eeplace .
+} UNION{ 
+   ?work mods:placeOfOrigin ?ht_place_node .
+   ?ht_place_node rdfs:label ?htplace .
+}
+BIND(COALESCE(?eeplace, ?htplace) as ?place) .
+VALUES ?place {\n"""
         for p in params["places"]:
-            queryplaces += '\t\t "' + p.encode('utf-8') + '"^^<http://www.w3.org/2001/XMLSchema#string>\n'
-        queryplaces += """
-        \t\t}
-        VALUES ?ht_place {\n"""
-        for p in params["places"]:
-            queryplaces += '\t "' + p.encode('utf-8') + '"\n'
-        queryplaces += "\t}\n"
+            queryplaces += '"' + p.encode('utf-8') + '"^^xsd:string\n'
+            queryplaces += '"' + p.encode('utf-8') + '"\n' #FIXME - to handle EEBOO wanting xsd:strings and HT not wanting datatype. 
+        queryplaces += "}\n"
 
     if params["subjects"]:
+	subject_ht = """
+?subjwork dc:creator ?author .
+?subjwork mods:subjectComplex ?subject .
+"""
+	subject_both = """
+?subjwork dc:creator ?ht_author .
+?subjwork mods:subjectComplex ?subject .
+"""
+
         querysubjects = """
-        ?ht_work mods:subjectComplex ?subject .
-        ?subject rdfs:label ?subjectLabel .
-        VALUES ?subjectLabel { \n"""
+FILTER(BOUND(?subject)) .
+?subject rdfs:label ?subjectLabel .
+VALUES ?subjectLabel { \n"""
         for p in params["subjects"]:
-            querysubjects += '\t "' + p.encode('utf-8') + '"\n'
-        querysubjects += "\t}\n"
+            querysubjects += '"' + p.encode('utf-8') + '"\n'
+        querysubjects += "}\n"
 
     if params["genres"]:
+	genre_ht = """
+?genrwork dc:creator ?author .
+?genrwork mods:genre ?genre.
+"""
+	genre_both = """
+?genrwork dc:creator ?ht_author .
+?genrwork mods:genre ?genre.
+"""
         querygenres = """
-        ?ht_work mods:genre ?genre .
-        ?genre rdfs:label ?genreLabel .
-        VALUES ?genreLabel { \n"""
+FILTER(BOUND(?genre)) .
+?genre rdfs:label ?genreLabel
+VALUES ?genreLabel { \n"""
         for p in params["genres"]:
-            querygenres += '\t "' + p.encode('utf-8') + '"\n'
-        querygenres += "\t}\n"
+            querygenres += '"' + p.encode('utf-8') + '"\n'
+        querygenres += "}\n"
     
     if params["dates"]:
         for datetype in params["dates"]: 
             if datetype == "workpub":
                 # both EEBOO and HT have publication dates to worry about
                 querydates += """
-                OPTIONAL {
-                    ?eeboo_work eeboo:precise-publication ?precisepub .
-                }
-                OPTIONAL {
-                    ?eeboo_work eeboo:approx-publication ?approxpub .
-                }
-                BIND(COALESCE(?precisepub, ?approxpub) as ?eeboo_pub) .
-                ?ht_work mods:resourceDateIssued ?ht_pubdate.  
-                FILTER(DATATYPE(?ht_pubdate) = <xsd:date>).
-                BIND(STRDT(STR(?ht_pubdate), xsd:date) as ?ht_pub) ."""
+{
+    ?work eeboo:precise-publication ?precisepub .
+} UNION {
+    ?work eeboo:approx-publication ?approxpub .
+} UNION { 
+    ?work mods:resourceDateIssued ?ht_pubdate . 
+    FILTER(DATATYPE(?ht_pubdate) = <xsd:date>).
+    BIND(STRDT(STR(?ht_pubdate), xsd:date) as ?ht_pub) .
+} 
+BIND(COALESCE(?precisepub, ?approxpub, ?ht_pub) as ?pubDate) ."""
                 querydates += "\nFILTER("
                 for ix, d in enumerate(params["dates"][datetype]):
-                    querydates += "?eeboo_pub " + d["daterelation"] + ' "' + d["date"] + '"^^xsd:date' + " && " + "?ht_pub " + d["daterelation"] + ' "' + d["date"] + '"^^xsd:date'
+                    querydates += "?pubDate " + d["daterelation"] + ' "' + d["date"] + '"^^xsd:date' 
                     if ix != len(params["dates"][datetype])-1:
                         querydates += " && "
                 querydates += ") .\n"
@@ -101,13 +141,12 @@ def createWorkset(params, constructInsert = "construct"):
             else: 
                 nonhyphendt = datetype.replace("-", "")
                 querydates += """
-                OPTIONAL {{
-                    ?eeboo_author eeboo:precise-{dt} ?precise{nonhyphendt} .
-                }}
-                OPTIONAL {{
-                    ?eeboo_author eeboo:approximate-{dt} ?approx{nonhyphendt} .
-                }}
-                BIND(COALESCE(?precise{nonhyphendt}, ?approx{nonhyphendt}) as ?{nonhyphendt}) . """.format(dt = datetype, nonhyphendt = nonhyphendt)
+{{
+    ?author eeboo:precise-{dt} ?precise{nonhyphendt} .
+}} UNION {{
+    ?author eeboo:approximate-{dt} ?approx{nonhyphendt} .
+}}
+BIND(COALESCE(?precise{nonhyphendt}, ?approx{nonhyphendt}) as ?{nonhyphendt}) . """.format(dt = datetype, nonhyphendt = nonhyphendt)
                 querydates += "\nFILTER("
                 for ix, d in enumerate(params["dates"][datetype]):
                     querydates += "?"+ nonhyphendt + " " +d["daterelation"] + ' "' + d["date"] + '"^^xsd:date'
@@ -118,7 +157,7 @@ def createWorkset(params, constructInsert = "construct"):
                 querydates.replace("?precisefloruit-start", "?precisefloruitstart").replace("?approxfloruit-start", "?approxfloruitstart").replace("?floruit-start", "?floruitstart").replace("?floruit-end", "?floruitend")
 
     workseturi = "<http://eeboo.oerc.ox.ac.uk/worksets/workset_" + str(uuid4()).replace("-", "") + ">"
-    createWorksetQuery =  createWorksetQuery.format(constructInsert = constructInsert, workseturi = workseturi, created = '"' + datetime.now().isoformat() + '"^^xsd:date', modified =  '"' + datetime.now().isoformat() + '"^^xsd:date', title = '"'+title.encode('utf-8')+'"', abstract = '"'+abstract.encode('utf-8')+'"', user = '"Test user"', authors = querypersons, places = queryplaces, subjects = querysubjects, genres = querygenres, dates = querydates)
+    createWorksetQuery =  createWorksetQuery.format(constructInsert = constructInsert, workseturi = workseturi, created = '"' + datetime.now().isoformat() + '"^^xsd:date', modified =  '"' + datetime.now().isoformat() + '"^^xsd:date', title = '"'+title.encode('utf-8')+'"', abstract = '"'+abstract.encode('utf-8')+'"', user = '"Test user"', authors = querypersons, places = queryplaces, subjects = querysubjects, genres = querygenres, dates = querydates, genre_ht = genre_ht, genre_both = genre_both, subject_ht = subject_ht, subject_both = subject_both, subjGenrUnionStart = subjGenrUnionStart, subjGenrUnionEnd = subjGenrUnionEnd, eeboo_only = eeboo_only)
     sparql.setQuery(createWorksetQuery)
     with open("elephant.log", "a") as logfile:
 	logfile.write(createWorksetQuery)

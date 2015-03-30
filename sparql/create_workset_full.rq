@@ -47,16 +47,13 @@ PREFIX : <http://eeboo.oerc.ox.ac.uk/>
  }}
 WHERE {{
    {authors}
-   {{
-       ?author salt:in_salt_set saltset:eeboo_creators .    
-
-       ?work eeboo:creator ?author ;
-               <http://www.loc.gov/mods/rdf/v1#titlePrincipal> ?eeboo_title_bnode .
-       ?eeboo_title_bnode rdfs:label ?title .
-    }} UNION {{ 
+   {eeboo_only}
+   {{ 
        ?author salt:in_salt_set saltset:htrc-wcsa_creators .
        ?work dc:creator ?author ;
              rdfs:label ?title .
+	{genre_ht}
+	{subject_ht}
  
     }} UNION {{ 
        ?author salt:in_salt_set saltset:eeboo_creators ;
@@ -64,8 +61,12 @@ WHERE {{
         ?ht_author :matchParticipant ?match ;
             salt:in_salt_set saltset:htrc-wcsa_creators .
         ?match :matchDecisionStatus "http://eeboo.oerc.ox.ac.uk/matchAlgorithm/confirmedMatch" .
+	{subjGenrUnionStart}
         ?work dc:creator ?ht_author ; 
              rdfs:label ?title .
+	{subjGenrUnionEnd}
+        {genre_both}
+	{subject_both}
     }}
 
     {places}
