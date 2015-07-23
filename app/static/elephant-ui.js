@@ -305,6 +305,7 @@ function removeFromQuery(element) {
 
 function packQuery() { 
     // construct our query parameters based on user's activities in the constructor
+    var queryParamsPresent = false; // must have at least one query param to launch request
     var person_params = [];
     var place_params = [];
     var subject_params = [];
@@ -315,15 +316,19 @@ function packQuery() {
     if($("#personsInQuery").html()) {
         $("#personsInQuery").children("div").each(function() { 
             person_params.push($(this).attr("title"));
+            queryParamsPresent = true;
         });
         $("#placesInQuery").children("div").each(function() { 
             place_params.push($(this).attr("title"));
+            queryParamsPresent = true;
         });
         $("#subjectsInQuery").children("div").each(function() { 
             subject_params.push($(this).attr("title"));
+            queryParamsPresent = true;
         });
         $("#genresInQuery").children("div").each(function() { 
             genre_params.push($(this).attr("title"));
+            queryParamsPresent = true;
         });
         $("#datesInQuery").children("div").each(function() { 
             if(typeof date_params[$(this).attr("data-datetype")] === "undefined") {
@@ -335,12 +340,18 @@ function packQuery() {
                     "daterelation": $(this).attr("data-daterelation")
                 }
             )
+            queryParamsPresent = true;
         });
-        console.log("Trying to request workset construction");
-        socket.emit('createWorksetRequest', {"persons": person_params, "places": place_params, "genres": genre_params, "subjects":subject_params, "dates":date_params, "title":title, "abstract":description});
-	$(".button#createWorkset").html('<i class="fa fa-cog fa-spin"></i>');
-	$(".button#createWorkset").addClass("disabled");
-        console.log("done.");
+        if(queryParamsPresent) { 
+            console.log("Trying to request workset construction");
+            socket.emit('createWorksetRequest', {"persons": person_params, "places": place_params, "genres": genre_params, "subjects":subject_params, "dates":date_params, "title":title, "abstract":description});
+        $(".button#createWorkset").html('<i class="fa fa-cog fa-spin"></i>');
+        $(".button#createWorkset").addClass("disabled");
+            console.log("done.");
+        }
+        else { 
+            alert("Please add at least one workset parameter (have you clicked 'add selected' or 'add all listed'?)");
+        }
     }
 }
 
