@@ -1,1 +1,10 @@
-UI for Elephant workset viewer / creator
+Web UI for Elephant workset viewer / constructor
+
+TO INSTALL:
+    pip install -r requirements.txt
+
+TO RUN:
+    python manage.py runserver
+
+Requires Virtuoso to be set up with HTRC-WCSA, EEBOO, and alignment triples 
+
