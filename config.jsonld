@@ -1,0 +1,94 @@
+{
+    "@context": { 
+        "@base":      "http://eeboo.oerc.ox.ac.uk/",
+        "saltsets":   "http://eeboo.oerc.ox.ac.uk/saltsets/",
+        "salt":       "http://eeboo.oerc.ox.ac.uk/salt/",
+        "listitem":    "http://eeboo.oerc.ox.ac.uk/salt/listitem/",
+        "ems":        "http://eeboo.oerc.ox.ac.uk/EMS/",
+        "slickmem":   "http://eeboo.oerc.ox.ac.uk/slickmem/",
+        "mo":         "http://purl.org/ontology/mo/",
+        "rdfs":       "http://www.w3.org/2000/01/rdf-schema#",
+        "sim":        "http://purl.org/ontology/similarity/",
+        "dct":        "http://purl.org/dc/terms/",
+        "dc":         "http://purl.org/dc/elements/1.1/",
+        "foaf":       "http://xmlns.com/foaf/0.1/",
+        "frbr":       "http://purl.org/vocab/frbr/core#",
+        "mods":       "http://www.loc.gov/mods/rdf/v1#",
+        "mads":       "http://www.loc.gov/mads/rdf/v1#",
+        "eeboo":      "http://eeboo.oerc.ox.ac.uk/eeboo/"
+    },
+    "salt:relation": [
+        {
+            "rdfs:label": "Context mapping between salt sets eeboo_creators and eea_authors",
+            "salt:relatesSet": [ 
+                { 
+                    "@type":  "salt:saltset", 
+                    "@id": "saltsets:eeboo_creators",
+                    "rdfs:label": "Creators featured in the EEBO data"
+                },
+                {
+                    "@type": "salt:saltset",
+                    "@id": "saltsets:eea_authors",
+                    "rdfs:label": "Full names featured in the OUP authors"
+                }
+            ],
+            "salt:hasContextItem": [
+                { 
+                    "@type": "salt:contextItem",
+                    "@id":   "salt:eeboo_creator",
+                    "salt:contextWeighting": "20",
+                    "rdfs:label": "creator_label",
+                    "salt:contextPath": [
+                        {
+                            "@id": "listitem:eeboo_creators",
+                            "@type": "salt:listItem",
+                            "rdfs:label": {"@id": "listitem:eeboo_creators_label"}
+                        },
+                        {
+                            "@id": "listitem:eea_authors",
+                            "@type": "salt:listItem",
+                            "rdfs:label": {"@id": "listitem:eea_authors"}
+                        }    
+                    ]
+                }
+            ]
+        },
+        {
+            "rdfs:label": "Context mapping between salt sets eeboo_creators and htc-wcsa_autors", 
+            "salt:relatesSet": [ 
+                { 
+                    "@type":  "salt:saltset", 
+                    "@id": "saltsets:eeboo_creators",
+                    "rdfs:label": "Creators featured in the EEBO data"
+                },
+                {
+                    "@type": "salt:saltset",
+                    "@id": "saltsets:htrc-wcsa_creators",
+                    "rdfs:label": "Creators of records featured in the HTRC-WCSA data"
+                }
+            ],
+            "salt:hasContextItem": [
+                { 
+                    "@type": "salt:contextItem",
+                    "@id":   "salt:eeboo_creator",
+                    "salt:contextWeighting": "10",
+                    "rdfs:label": "publication places",
+                    "salt:contextPath": [
+                        {
+                            "@id": "listitem:eeboo_creators",
+                            "@type": "salt:listItem",
+                            "rdfs:label": {"@id": "listitem:eeboo_creators_label"},
+                            "salt:in_salt_set": {"@id": "saltsets:eeboo_creators"}
+                        },
+                        {
+                            "@id": "listitem:htrcwcsa_creators",
+                            "@type": "salt:listItem",
+                            "rdfs:label": {"@id": "listitem:htrcwcsa_creators_label"},
+                            "salt:in_salt_set": {"@id": "saltsets:htrc-wcsa_creators"}
+                        }    
+                    ]
+                } 
+            ]
+        }
+    ]
+}
