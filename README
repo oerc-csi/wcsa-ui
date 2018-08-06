@@ -1,4 +1,4 @@
-Prototype WCSA viewer. Based on the [elephat-ui viewer](http://github.com/oerc-elephat/elephant-ui)
+Prototype WCSA viewer. Based on the (http://github.com/oerc-elephat/elephant-ui)[elephat-ui viewer]
 
 TO INSTALL:
     pip install -r requirements.txt
