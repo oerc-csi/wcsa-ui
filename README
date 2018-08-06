@@ -1,4 +1,4 @@
-Web UI for Elephant workset viewer / constructor
+Prototype WCSA viewer. Based on the [elephat-ui viewer](http://github.com/oerc-elephat/elephant-ui)
 
 TO INSTALL:
     pip install -r requirements.txt
@@ -6,5 +6,4 @@ TO INSTALL:
 TO RUN:
     python manage.py runserver
 
-Requires Virtuoso to be set up with HTRC-WCSA, EEBOO, and alignment triples 
 
