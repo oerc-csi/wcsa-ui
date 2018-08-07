@@ -6,6 +6,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON, POST
 from pprint import pprint
 from datetime import datetime
 from uuid import uuid4
+import string
 
 def create_app(config_name):
     app = Flask(__name__)
@@ -24,6 +25,8 @@ def create_socketio(app):
 def createWorkset(params, constructInsert = "construct"):
     app = current_app._get_current_object()
     sparql = SPARQLWrapper(endpoint = app.config["ENDPOINT"]) 
+    sparql.addParameter("should-sponge", "grab-everything") # turn on virtuoso sponger
+    print sparql
     sparql.setMethod(POST) 
     sparql.setReturnFormat(JSON)
     createWorksetQuery = open(app.config["ELEPHANT_QUERY_DIR"] + "create_workset_full.rq").read()
@@ -157,10 +160,27 @@ BIND(COALESCE(?precise{nonhyphendt}, ?approx{nonhyphendt}) as ?{nonhyphendt}) . 
                 querydates.replace("?precisefloruit-start", "?precisefloruitstart").replace("?approxfloruit-start", "?approxfloruitstart").replace("?floruit-start", "?floruitstart").replace("?floruit-end", "?floruitend")
 
     workseturi = "<http://eeboo.oerc.ox.ac.uk/worksets/workset_" + str(uuid4()).replace("-", "") + ">"
-    createWorksetQuery =  createWorksetQuery.format(constructInsert = constructInsert, workseturi = workseturi, created = '"' + datetime.now().isoformat() + '"^^xsd:date', modified =  '"' + datetime.now().isoformat() + '"^^xsd:date', title = '"'+title.encode('utf-8')+'"', abstract = '"'+abstract.encode('utf-8')+'"', user = '"Test user"', authors = querypersons, places = queryplaces, subjects = querysubjects, genres = querygenres, dates = querydates, genre_ht = genre_ht, genre_both = genre_both, subject_ht = subject_ht, subject_both = subject_both, subjGenrUnionStart = subjGenrUnionStart, subjGenrUnionEnd = subjGenrUnionEnd, eeboo_only = eeboo_only)
+    createWorksetQuery =  createWorksetQuery.format(workseturi = workseturi,   authors = querypersons, places = queryplaces, subjects = querysubjects, genres = querygenres, dates = querydates, genre_ht = genre_ht, genre_both = genre_both, subject_ht = subject_ht, subject_both = subject_both, subjGenrUnionStart = subjGenrUnionStart, subjGenrUnionEnd = subjGenrUnionEnd, eeboo_only = eeboo_only)
     sparql.setQuery(createWorksetQuery)
     with open("elephant.log", "a") as logfile:
-	logfile.write(createWorksetQuery)
+        logfile.write(createWorksetQuery)
+    print(createWorksetQuery)
+    works = []
+    results = sparql.query().convert()
+    for result in results["results"]["bindings"]:
+        works.append(result["work"]["value"])
+    print(results)
+    insertWorksetQuery = open(app.config["ELEPHANT_QUERY_DIR"] + "insert_workset.rq").read().format(
+        workseturi = workseturi, 
+        works = string.join(['<' + work + '>' for work in works]),
+        created = '"' + datetime.now().isoformat() + '"^^xsd:date', 
+        modified =  '"' + datetime.now().isoformat() + '"^^xsd:date',
+        title = '"'+title.encode('utf-8')+'"', 
+        abstract = '"'+abstract.encode('utf-8')+'"', 
+        user = '"Test user"'
+    )
+    print(insertWorksetQuery)
+    sparql.setQuery(insertWorksetQuery)
     results = sparql.query().convert()
     return workseturi 
 

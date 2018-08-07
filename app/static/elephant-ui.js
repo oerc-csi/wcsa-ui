@@ -4,7 +4,7 @@ var socket;
 
 function loadWorksetsByUser(userSelect) { 
     var user = $(userSelect).val();
-    window.location.href = 'http://eeboo.oerc.ox.ac.uk/viewer?user="' + user + '"';
+    window.location.href = 'http://eeboo.oerc.ox.ac.uk/wcsa/viewer?user="' + user + '"';
 }
 
 function personInput(thisItem) { 
@@ -357,8 +357,8 @@ function packQuery() {
 
 $(document).ready(function() { 
     // set up websocket
-    console.log("Trying to connect...");
-    socket=io.connect('http://' + document.domain + ':' +  location.port);
+    console.log("Trying to connect to " + document.domain + "port: ", location.port);
+    socket=io.connect('http://' + document.domain + ':' + location.port);
     socket.on('connect', function() { 
         socket.emit('clientConnectionEvent', 'Client connected.');
         console.log("Connected to server at http://" + document.domain + ':' + location.port);
@@ -368,7 +368,7 @@ $(document).ready(function() {
 
     socket.on('createWorksetHandled', function(workseturi) { 
         console.log("createWorksetHandled: ", workseturi);
-	window.location.href = "http://eeboo.oerc.ox.ac.uk/view_workset?uri=" + workseturi.replace("<", "").replace(">", "");
+	window.location.href = "http://eeboo.oerc.ox.ac.uk/wcsa/view_workset?uri=" + workseturi.replace("<", "").replace(">", "");
     });
     
     socket.on('createWorksetFailed', function() { 

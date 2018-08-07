@@ -15,34 +15,24 @@ PREFIX saltset: <http://eeboo.oerc.ox.ac.uk/saltsets/>
 PREFIX bib: <http://id.loc.gov/ontologies/bibframe>
 PREFIX : <http://eeboo.oerc.ox.ac.uk/>
 
-SELECT ?work ?author WHERE {{
-   {eeboo_only}
-   {{ 
-       ?author salt:in_salt_set saltset:htrc-wcsa_creators .
-       ?work dc:creator ?author ;
-             rdfs:label ?title .
-	{genre_ht}
-	{subject_ht}
- 
-    }} UNION {{ 
-       ?author salt:in_salt_set saltset:eeboo_creators ;
-					owl:sameAs ?ht_author .
-					SERVICE <https://worksets.htrc.illinois.edu/sparql> {{
-	{subjGenrUnionStart}
-								?work <http://id.loc.gov/ontologies/bibframe/contribution> ?contribution .
-								?contribution <http://id.loc.gov/ontologies/bibframe/agent> ?ht_author . 
-	{subjGenrUnionEnd}
-        {genre_both}
-	{subject_both}
-					}}
-    }}
-
-    {places}
-    {subjects}
-    {genres}              
-    {dates}
+INSERT {{
+	GRAPH :worksets {{ 
+	   {workseturi}
+			a owl:NamedIndividual ;
+			a ht:Workset ;
+			dc:created {created} ;
+			dc:modified {modified} ;
+			dc:title {title} ;
+			dc:creator {user} ;
+			a ro:ResearchObject ;
+			a ore:Aggregation ;
+			ore:aggregates ?work ; 
+			ht:gathers ?work ;
+			dc:abstract {abstract} .
+	}}
 }} 
-{authors}
-
-
-
+WHERE {{
+   VALUES ?work {{
+		{works}
+   }}
+}}

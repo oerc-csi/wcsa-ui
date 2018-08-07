@@ -17,7 +17,7 @@ manager.add_command("shell", Shell(make_context=make_shell_context))
 
 @manager.command
 def runserver():
-    socketio.run(app)
+    socketio.run(app, port=4545)
 
 @socketio.on('clientConnectionEvent')
 def client_connection_event(message):

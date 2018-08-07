@@ -6,7 +6,7 @@
     <body>
 	{% if worksets == {} %}
             <div class="msg">Your workset query returned 0 results. No workset was created.</div>
-	    <span class="button"><a href="/construct">Return to workset constructor</a></span> <span class="button"><a href="/">View all worksets</a></span>
+	    <span class="button"><a href="{{base|safe}}/construct">Return to workset constructor</a></span> <span class="button"><a href="/">View all worksets</a></span>
 	{% endif %}
         {% for workset in worksets %}
         <div class = "ui-head" title=" {{ worksets[workset]["uri"]|safe }}">

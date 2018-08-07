@@ -2,7 +2,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'a SECRET key that is hard to GUESS!!! (cryptic elephants!)'
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'aefsfsannngarg21 1fgerf3fp0'
     
     @staticmethod
     def init_app(app):
@@ -11,11 +11,11 @@ class Config:
 
 class DevelopmentConfig(Config): 
     DEBUG = True
-    BASE_URI = "http://127.0.0.1:8890" # default virtuoso port
-    SPARQLUSER = "sparqlusername"
-    SPARQLPASSWORD = "sparqlpassword"
-    ENDPOINT = "http://127.0.0.1:8890/sparql" # default virtuoso endpoint location
-    ELEPHANT_QUERY_DIR = os.environ.get("ELEPHANT_QUERY_DIR") or os.environ.get("HOME") + "/elephant-ui/sparql/"
+    BASE_PATH= "/wcsa"
+    SPARQLUSER = "elephant"
+    SPARQLPASSWORD = "AOftYDpEakHIVTlLCi2O"
+    ENDPOINT = "http://eeboo.oerc.ox.ac.uk/sparql"
+    ELEPHANT_QUERY_DIR = os.environ.get("ELEPHANT_QUERY_DIR") or os.environ.get("HOME") + "/wcsa-ui/sparql/"
     USER = "testuser"
 
 
