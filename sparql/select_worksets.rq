@@ -3,68 +3,56 @@ PREFIX dc: <http://purl.org/dc/elements/1.1/>
 PREFIX mods: <http://www.loc.gov/mods/rdf/v1#>
 PREFIX salt: <http://eeboo.oerc.ox.ac.uk/salt/>
 PREFIX eeboo: <http://eeboo.oerc.ox.ac.uk/eeboo/>
-SELECT DISTINCT ?workset ?uri ?urilocal ?mod_date ?title ?abstract ?username ?work ?worktitle ?author ?creator ?pubdate ?datePrecision ?place ?imprint ?elecLoc ?viaf ?loc ?saltset 
-WHERE {{
-    {0}
-    {1}
+PREFIX bf: <http://id.loc.gov/ontologies/bibframe/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+
+select ?saltset ?workset ?creator ?mod_date ?title ?abstract ?username ?work ?instance ?item ?author ?publisher ?place ?pubdate ?worktitle
+where {{
+		{1}
     ?workset a ht:Workset ;
        dc:modified ?mod_date ;
        dc:title ?title ;
        dc:abstract ?abstract ;
        dc:creator ?username ;
        ht:gathers ?work .
-#    ?user dc:identifier ?username .
-    ?work salt:in_salt_set ?saltset .
-    OPTIONAL {{ 
-        ?work rdfs:label ?worktitle; 
+     {{
+     ?work salt:in_salt_set ?saltset ;
+              rdfs:label ?worktitle;
               eeboo:raw_pubplace ?place ;
               eeboo:creator ?creator .
-        ?creator rdfs:label ?author . 
+        ?creator rdfs:label ?author .
         ?work mods:publisher ?publisherbnode .
         ?publisherbnode rdfs:label ?publisher .
-        BIND(COALESCE(?publisher, "") as ?imprint) .
-        ?work eeboo:electronicLocation ?elecLoc .
-        OPTIONAL {{ 
-           ?creator eeboo:hasExternalAuthorityVIAF ?viafid .
-           ?creator eeboo:hasExternalAuthorityLoC ?locid .
-        }}
-        BIND(COALESCE(?viafid, "") as ?viaf) .
-        BIND(COALESCE(?locid, "") as ?loc) .
-        OPTIONAL {{ 
+        OPTIONAL {{
             ?work eeboo:precise-publication ?precisepub .
-            BIND("" as ?pubDatePrecision) . 
+            BIND("" as ?pubDatePrecision) .
         }}
-        OPTIONAL {{ 
+        OPTIONAL {{
             ?work eeboo:approx-publication ?approxpub .
             BIND("(approx.)" as ?pubDatePrecision) .
         }}
-    
-        BIND(COALESCE(STR(COALESCE(?precisepub, ?approxpub)), "Unknown") as ?pubdate ).
-        BIND(COALESCE(?pubDatePrecision, "") as ?datePrecision) . 
 
-     
-    }}  . 
-    OPTIONAL{{ 
-        ?work mods:resourceDateIssued ?pubdate .
-        FILTER(str(datatype(?pubdate)) = "xsd:string") . 
-        ?work mods:titlePrincipal ?titlebnode ;
-                mods:placeOfOrigin ?placebnode .
-        ?placebnode rdfs:label ?place . 
-        FILTER(?place != "enk" && ?place != "stk") . #TODO what is this?
-        ?titlebnode rdfs:label ?worktitle .
-        FILTER(?worktitle != "ESTC" && ?worktitle != "Wing (2nd ed.)" && ?worktitle != "Wing (2nd ed., 1994)") . #TODO what are these?
-        ?work  dc:creator ?creator ;
-                mods:statementOfResponsibility ?publisher;
-                mods:locationOfResource ?locbnode1 .
-        BIND(COALESCE(?publisher, "") as ?imprint) .
-        ?locbnode1 mods:locationCopy ?locbnode2 .
-        ?locbnode2 mods:locationCopyElectronicLocator ?elecLocStr .
-        BIND(IRI(?elecLocStr) as ?elecLoc) .
-        ?creator rdfs:label ?author .
-        BIND("" as ?datePrecision) .
-        BIND("" as ?viaf) .
-        BIND("" as ?loc) .
-              
-    }} .
+        BIND("Unknown" as ?pubdate).
+
+    }} UNION {{
+	SERVICE <http://emblematica.library.illinois.edu:8080/sparql> {{
+		?work	bf:hasInstance	?instance ;
+				bf:agent ?creator .
+    ?creator rdfs:label	?author .
+
+		?instance	bf:hasItem	?item ;
+					bf:agent	?publisher ;
+					bf:place	?place ;
+					bf:date	?pubdate .
+
+		OPTIONAL {{ ?item	dc:title	?worktitle . }}
+	}}
+}}
+}}
+
+
+VALUES ?workset {{
+	{0}
 }}
 

@@ -1,9 +1,10 @@
-from flask import render_template, request, redirect, url_for, current_app
-from pprint import pprint
-from SPARQLWrapper import SPARQLWrapper, JSON, DIGEST
-from rdflib import Graph, plugin, URIRef, Literal
-from rdflib.parser import Parser
+from flask import render_template, request, redirect, url_for, current_app 
+from pprint import pprint 
+from SPARQLWrapper import SPARQLWrapper, JSON, DIGEST 
+from rdflib import Graph, plugin, URIRef, Literal 
+from rdflib.parser import Parser 
 from rdflib.serializer import Serializer
+from random import shuffle
 import json
 import re
 
@@ -20,8 +21,8 @@ def all_worksets():
 def detail_workset():
 	app = current_app._get_current_object()
 	workseturi = request.args.get('uri', '')
-	ws = "BIND(<{0}> as ?workset) .".format(workseturi)
-	workset = select_worksets(ws)
+	ws = "<{0}>".format(workseturi)
+	workset = select_worksets(ws) 
 	return render_template("workset.html", worksets=workset, base=app.config["BASE_PATH"])
 
 def select_worksets(specific_workset = "", specific_user = ""):
@@ -31,12 +32,15 @@ def select_worksets(specific_workset = "", specific_user = ""):
 	sparql.setCredentials(user = app.config["SPARQLUSER"], passwd = app.config["SPARQLPASSWORD"])
 	selectWorksetsQuery = open(app.config["ELEPHANT_QUERY_DIR"] + "select_worksets.rq").read()
 	query = selectWorksetsQuery.format(specific_workset, specific_user)
+	print query
 	sparql.setQuery(query)
 	sparql.setReturnFormat(JSON)
 	try: 
 		results = sparql.query().convert()
-	except: 
+	except Exception as e: 
+		print(e)
 		return {};
+	pprint(results)
 	worksets = dict()
 	for result in results["results"]["bindings"]:
 		if result["workset"]["value"] not in worksets:
@@ -48,10 +52,10 @@ def select_worksets(specific_workset = "", specific_user = ""):
 				"user": result["username"]["value"],
 				"works": list()
 			}
-		if (result["saltset"]["value"] == "http://eeboo.oerc.ox.ac.uk/saltsets/htrc-wcsa_works"): 
-			saltset = "htrc-wcsa_works"
-		else:
+		if ("saltset" in result):
 			saltset = "eeboo_works"
+		else:
+			saltset = "htrc-wcsa_works"
 		try:
 			worksets[result["workset"]["value"]]["works"].append(
 				{
@@ -60,19 +64,24 @@ def select_worksets(specific_workset = "", specific_user = ""):
 					"author": result["author"]["value"],
 					"creator": result["creator"]["value"],
 					"pubdate": result["pubdate"]["value"].replace("-01-01",""), #FIXME
-					"datePrecision": result["datePrecision"]["value"],
+			#		"datePrecision": result["datePrecision"]["value"],
 					"place": result["place"]["value"],
 				#                "imprint": result["imprint"]["value"],
-					"elecLoc": result["elecLoc"]["value"],
-					"viaf": result["viaf"]["value"],
-					"loc": result["loc"]["value"],
+		#			"elecLoc": result["elecLoc"]["value"],
+		#			"viaf": result["viaf"]["value"],
+		#			"loc": result["loc"]["value"],
 					"saltset":saltset
 				})
-		except:
+			
+
+		except Exception as e:
+			print("EXCEPTION: ")
+			print(e)
 		# FIXME unicode issue 
 			pass
 		for workset in worksets:
-			worksets[workset]["works"] = sorted(worksets[workset]["works"], key=lambda k: (k["author"], k["worktitle"]))
+			# SHUFFLE FOR MORE VARIED PRESENTATION
+			shuffle(worksets[workset]["works"]) 
 	return worksets
 
 @main.route('/wcsa/construct.html', methods = ['GET', 'POST'])
