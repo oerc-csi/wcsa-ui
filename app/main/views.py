@@ -57,6 +57,10 @@ def select_worksets(specific_workset = "", specific_user = ""):
 		else:
 			saltset = "htrc-wcsa_works"
 		try:
+
+			elecLoc = result["elecLoc"]["value"] if "elecLoc" in result else "http://example.com/FIXME"
+			loc = result["loc"]["value"] if "loc" in result else ""
+			viaf = result["viaf"]["value"] if "viaf" in result else ""
 			worksets[result["workset"]["value"]]["works"].append(
 				{
 					"uri": result["work"]["value"], 
@@ -67,9 +71,9 @@ def select_worksets(specific_workset = "", specific_user = ""):
 			#		"datePrecision": result["datePrecision"]["value"],
 					"place": result["place"]["value"],
 				#                "imprint": result["imprint"]["value"],
-		#			"elecLoc": result["elecLoc"]["value"],
-		#			"viaf": result["viaf"]["value"],
-		#			"loc": result["loc"]["value"],
+					"elecLoc": elecLoc,
+					"viaf": viaf,
+					"loc": loc,
 					"saltset":saltset
 				})
 			

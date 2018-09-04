@@ -42,21 +42,19 @@
                             {% if work["saltset"] == "eeboo_works" %}
                                 <a href="{{ work["creator"] }}" title="{{ work["creator"] }}" target="_blank" class="bubble eebo">EEBO</a> 
                             {% endif %}
-												{#
                             {% if work["saltset"] == "eeboo_works" and work["viaf"] != "" %}
                             <a href="{{ work["viaf"] }}" title="{{ work["viaf"] }}" target="_blank" class="bubble viaf">VIAF</a> 
                             <a href="{{ work["loc"] }}" title="{{ work["loc"] }}" target="_blank" class="bubble loc">LOC</a>
                             {% endif %}
-												#}
                         </div>
                         <div class="pubLocation"><span class="itemheader">Place of publication:</span> {{ work["place"]|safe }}</div>
                         <div class="imprint"><span class="itemheader">Imprint:</span> {{ work["place"]|safe }}</div>
                         <div class="pubDate"><span class="itemheader">Publication year:</span> {{ work["pubdate"]|safe }}{# {{work["datePrecision"]|safe}} #}</div>
-                       {# {% if work["saltset"] == "eeboo_works" %}
+                        {% if work["saltset"] == "eeboo_works" %}
                             <div class="elecLoc"><a href="{{ work["elecLoc"] }}" target="_blank">View electronic copy (EEBO via Historical Texts)</a></div>
                         {% else %}
                             <div class="elecLoc"><a href="{{ work["elecLoc"] }}" target="_blank">View electronic copy (HathiTrust)</a></div>
-                        {% endif %} #}
+                        {% endif %} 
                     </div>
                     {% endfor %}
                 </div>
